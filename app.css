@@ -1,0 +1,12 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    /* font-family: 'Roboto Mono', monospace; */
+}
+
+h1 {
+    font-weight: 700;
+}
+
+.top-nav-button {
+    font-size: 2rem;
+}
