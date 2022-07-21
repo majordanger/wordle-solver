@@ -20,22 +20,107 @@
 
 <body>
   <div class="container p-1 shadow">
+    <!-- BEGIN Top-level nav button tabs. -->
     <ul class="nav justify-content-center nav-justified nav-pills mb-3 p-2" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active top-nav-button" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
-          type="button" role="tab" aria-controls="pills-home" aria-selected="true">SOLVER</button>
+        <button class="nav-link active top-nav-button" id="pills-solver-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-solver" type="button" role="tab" aria-controls="pills-solver"
+          aria-selected="true">SOLVER</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link top-nav-button" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
-          type="button" role="tab" aria-controls="pills-profile" aria-selected="false">DICTIONARY</button>
+        <button class="nav-link top-nav-button" id="pills-dictionary-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-dictionary" type="button" role="tab" aria-controls="pills-dictionary"
+          aria-selected="false">DICTIONARY</button>
       </li>
     </ul>
+    <!-- END Top-level nav button tabs. -->
+
     <div class="tab-content" id="pills-tabContent">
-      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
-        tabindex="0">solver stuff here</div>
-      <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
-        TODO:
-        build the dictionary...</div>
+      <!-- BEGIN Solver tab -->
+      <div class="tab-pane fade show active" id="pills-solver" role="tabpanel" aria-labelledby="pills-solver-tab"
+        tabindex="0">
+        <div class="row">
+          <div class="column col-md-6">
+            <div class="wrapper">
+              <div class="row-label">CORRECT</div>
+              <div class="tile">
+                <p>ABC<BR>DEF<BR>GHI</p>
+              </div>
+              <div class="tile">
+                <p>WX<BR>YZ</p>
+              </div>
+              <div class="tile">
+                <p>ABC1<BR>DEF2<BR>GHI</p>
+              </div>
+              <div class="tile">
+                <p>ABC1<br>DEF2<br>GHI3</p>
+              </div>
+              <div class="tile">
+                <p>A</p>
+              </div>
+              <div class="row-label">MISPLACED</div>
+              <div class="tile">
+                <p>A</p>
+              </div>
+              <div class="tile">
+                <p>A</p>
+              </div>
+              <div class="tile">
+                <p>A</p>
+              </div>
+              <div class="tile">
+                <p>A</p>
+              </div>
+              <div class="tile">
+                <p>A</p>
+              </div>
+              <div class="row-label">INCORRECT</div>
+              <div class="tile" id="incorrect-box">
+                <p>A</p>
+              </div>
+            </div>
+          </div>
+          <div class="column col-md-6">STRATEGY STUFF<BR> Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            Quod, laboriosam non. Molestiae omnis in iusto saepe doloremque, consequuntur neque distinctio tempore nisi.
+            Eum ullam nulla reiciendis iste ipsam, maxime voluptatum?
+          </div>
+        </div>
+      </div>
+
+      <!-- END Solver tab -->
+      <!-- BEGIN Dictionary tab -->
+      <div class="tab-pane fade" id="pills-dictionary" role="tabpanel" aria-labelledby="pills-dictionary-tab"
+        tabindex="0">
+        <P>By Default the dictionaries from Wordle are used. If you are playing a variant of Wordle and wish to use a
+          different dictionary, either paste it into the field(s) below, or upload from a file. "Possible
+          Solutions" are the words that could be a Wordle solution. "Accepted Guesses" are words accepted by Wordle that
+          are valid words in the dictionary, but will never be the solution. The union of solutions and guesses
+          is the complete list of what a valid Wordle guess is. </P>
+        <P> You can choose to only use the "Possible Solutions"
+          column when using your own dictionary. As you enter guess information on the "Solver" tab, the solutions and
+          guesses dictionaries will reduce themselves. </P>
+        <P>Refresh the page to reset the solver and dictionary to defaults.</P>
+
+        <div class="row">
+          <div class="dictionary col-6">
+            <p>
+              <input type="file" id="fileElem1" style="display:none">
+              <button id="fileSelect1" class="btn btn-secondary btn-sm">Load Solution File</button>
+            </p>
+            <label for="solutions"><strong>Possible Solutions:</strong></label><br>
+            <textarea id="solutions" name="solutions" cols="7" rows="10"></textarea>
+          </div>
+          <div class="dictionary col-6">
+            <p>
+              <input type="file" id="fileElem2" style="display:none">
+              <button id="fileSelect2" class="btn btn-secondary btn-sm">Load Guesses File</button>
+            </p>
+            <label for="guesses"><strong>Accepted Guesses:</strong></label><br>
+            <textarea id="guesses" name="guesses" cols="7" rows="10"></textarea>
+          </div>
+        </div>
+      </div>
+      <!-- END Dictionary tab -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
@@ -44,5 +129,7 @@
     <script src="app.js"></script>
   </div>
 </body>
+
+<!-- netsh interface portproxy add v4tov4 listenport=5500 listenaddress=0.0.0.0 connectport=5500 connectaddress=172.28.172.253 -->
 
 </html>
