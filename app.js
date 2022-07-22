@@ -37,3 +37,32 @@ fileElem1.addEventListener("change", doStuff, false);
 
 
 loadCurrentDictionaries();
+
+
+const allTiles = document.querySelectorAll(".tile");
+console.log(allTiles);
+for (let i = 0; i < allTiles.length; i++) {
+    allTiles[i].addEventListener('click', (e) => allTiles[i].focus());
+    console.log(allTiles[i].onclick);
+}
+
+const divs = document.querySelectorAll(".wrap-tile p");
+for (let i = 0; i < divs.length; i++) {
+
+    // console.log(divs[i].textContent);
+    // console.log(divs[i].innerHTML);
+    // console.log(divs[i].innerText);
+    // divs[i].innerText = "A\nBcwe\nfgh";
+    // // divs[i].innerText = divs[i].textContent;
+    // console.log(divs[i].textContent);
+    // console.log(divs[i].innerHTML);
+    // console.log(divs[i].innerText);
+    // console.log(p);
+}
+console.log(divs);
+
+function formatPForTile (p) {
+    const rawText = p.textContent;
+    if (rawText.length === 0) return p;
+
+}
