@@ -1,12 +1,26 @@
-let wordleDefaultSolutions = "TEST1\nTEST2\nTEST3\nTEST4";
-let wordleDefaultGuesses = "TEST5\nTEST6\nTEST7\nTEST8";
+// dictionaries that the solver will use and Dictionary tab will interact with.
+const wordleDefaultSolutions = {
+    dictStr: 'TEST1\nTEST2\nTEST3\nTEST4',
+    dictArr: ['TEST1', 'TEST2', 'TEST3', 'TEST4']
+};
+const wordleDefaultGuesses = {
+    dictStr: 'TEST5\nTEST6\nTEST7\nTEST8',
+    dictArr: ['TEST6', 'TEST6', 'TEST7', 'TEST8']
+};
+
+// the text areas
 const dictionarySolutions = document.querySelector("#solutions");
 const dictionaryGuesses = document.querySelector("#guesses");
+
+
+
 const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 function loadCurrentDictionaries() {
-    dictionarySolutions.textContent = wordleDefaultSolutions;
-    dictionaryGuesses.textContent = wordleDefaultGuesses;
+    dictionarySolutions.value = wordleDefaultSolutions.dictStr;
+    dictionaryGuesses.value = wordleDefaultGuesses.dictStr;
+    console.log(wordleDefaultSolutions);
+    console.log(wordleDefaultGuesses);
 }
 
 // The standard file selector is ugly so hide it and replace it with a button. 
@@ -30,48 +44,63 @@ fileSelect2.addEventListener("click", function (e) {
     }
 }, false);
 
-const doStuff = function () {
-    const fr = new FileReader();
-    fr.onload = function () {
-        wordleDefaultSolutions = fr.result;
-        loadCurrentDictionaries();
-    }
-    fr.readAsText(this.files[0]);
+// add listeners to the textareas and change the button behavior if the textarea is updated.
+// dictionarySolutions.addEventListener('input',() => {
+//     fileSelect1.innerText = 'Process Dictionary';
+// });
+
+// use a promise to wrap the file reader to avoid race conditions processing the contents.
+function readFileAsync(file) {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsText(file);
+        // file.value = '';
+    })
 }
 
-fileElem1.addEventListener("change", doStuff, false);
+async function processFileForDict(file, dict) {
+    try {
+        dict.dictStr = await readFileAsync(file);
+        processDictionary(dict);
+        loadCurrentDictionaries();
+        // alert(dict.dictStr);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+function loadDictionary(dict) {
+    return function () {
+        processFileForDict(this.files[0], dict);
+    }
+}
+
+function processDictionary(dict) {
+    // split on any non-alpha chars, remove non-5-letter words, convert to upper case, remove dupes, and sort.
+    dict.dictArr = Array.from(
+        new Set(dict.dictStr
+            .split(/[^A-Za-z]+/)
+            .filter(word => word.length === 5)
+            .map(word => word.toUpperCase())))
+        .sort();
+    dict.dictStr = dict.dictArr.join('\n');
+}
+
+fileElem1.addEventListener("change", loadDictionary(wordleDefaultSolutions), false);
+fileElem2.addEventListener("change", loadDictionary(wordleDefaultGuesses), false);
 
 
 loadCurrentDictionaries();
 
 
 const allTiles = document.querySelectorAll(".tile");
-// console.log(allTiles);
 for (let i = 0; i < allTiles.length; i++) {
     allTiles[i].addEventListener('click', (e) => allTiles[i].focus());
-    console.log(allTiles[i].onclick);
 }
-
-// const divs = document.querySelectorAll(".wrap-tile p");
-// for (let i = 0; i < divs.length; i++) {
-
-// console.log(divs[i].textContent);
-// console.log(divs[i].innerHTML);
-// console.log(divs[i].innerText);
-// divs[i].innerText = "A\nBcwe\nfgh";
-// // divs[i].innerText = divs[i].textContent;
-// console.log(divs[i].textContent);
-// console.log(divs[i].innerHTML);
-// console.log(divs[i].innerText);
-// console.log(p);
-// }
-// console.log(divs);
-
-// function formatPForTile(p) {
-//     const rawText = p.textContent;
-//     if (rawText.length === 0) return p;
-
-// }
 
 document.addEventListener("keydown", e => {
     handleKeyInput(e);
@@ -144,3 +173,7 @@ if (!String.prototype.splice) {
         return this.slice(0, start) + subStr + this.slice(start);
     };
 }
+
+window.addEventListener('keydown', (e) => {
+    console.log(e)
+})

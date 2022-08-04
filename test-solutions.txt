@@ -1,1 +1,5 @@
-{gooda,as,goodb  ,\nwer3f\ngoodc,  goodd(}wert6y,23456,  goode  \n  ,    goodf]
+{goode,as,goodD  ,
+wer3f\\n\goodc,  goodb(}wert6y,23456,  GOODA  \r\n gooda ,   
+
+
+ goodf]

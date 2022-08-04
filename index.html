@@ -104,7 +104,7 @@
         <div class="row">
           <div class="dictionary col-6">
             <p>
-              <input type="file" id="fileElem1" style="display:none">
+              <input type="file" id="fileElem1" style="display:none" onclick="this.value=null;">
               <button id="fileSelect1" class="btn btn-secondary btn-sm rounded-0">Load Solution File</button>
             </p>
             <label for="solutions"><strong>Possible Solutions:</strong></label><br>
@@ -112,7 +112,7 @@
           </div>
           <div class="dictionary col-6">
             <p>
-              <input type="file" id="fileElem2" style="display:none">
+              <input type="file" id="fileElem2" style="display:none" onclick="this.value=null;">
               <button id="fileSelect2" class="btn btn-secondary btn-sm rounded-0">Load Guesses File</button>
             </p>
             <label for="guesses"><strong>Accepted Guesses:</strong></label><br>
