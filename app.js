@@ -1,53 +1,115 @@
-// dictionaries that the solver will use and Dictionary tab will interact with.
+// Dictionaries that the solver will use and Dictionary tab will interact with.
 const wordleDefaultSolutions = {
-    dictStr: 'TEST1\nTEST2\nTEST3\nTEST4',
-    dictArr: ['TEST1', 'TEST2', 'TEST3', 'TEST4']
+    dictStr: 'TESTA\nTESTB\nTESTC\nTESTD',
+    dictArr: ['TESTA', 'TESTB', 'TESTC', 'TESTD']
 };
 const wordleDefaultGuesses = {
-    dictStr: 'TEST5\nTEST6\nTEST7\nTEST8',
-    dictArr: ['TEST6', 'TEST6', 'TEST7', 'TEST8']
+    dictStr: 'TESTE\nTESTF\nTESTG\nTESTH',
+    dictArr: ['TESTE', 'TESTF', 'TESTG', 'TESTH']
 };
 
-// the text areas
+// The text areas.
 const dictionarySolutions = document.querySelector("#solutions");
 const dictionaryGuesses = document.querySelector("#guesses");
 
-
-
-const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-function loadCurrentDictionaries() {
-    dictionarySolutions.value = wordleDefaultSolutions.dictStr;
-    dictionaryGuesses.value = wordleDefaultGuesses.dictStr;
-    console.log(wordleDefaultSolutions);
-    console.log(wordleDefaultGuesses);
-}
+const ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 // The standard file selector is ugly so hide it and replace it with a button. 
 // Add a listener to the button that in turn clicks the hidden selector.
-const fileSelect1 = document.getElementById("fileSelect1"),
-    fileElem1 = document.getElementById("fileElem1");
+const fileSelect1 = document.getElementById("fileSelect1");
+const fileElem1 = document.getElementById("fileElem1");
 
-fileSelect1.addEventListener("click", function (e) {
+// Again for the other button.
+const fileSelect2 = document.getElementById("fileSelect2");
+const fileElem2 = document.getElementById("fileElem2");
+
+// If the button is set to read a file, this passes the click through to the input element.
+function clickPassCallback1(e) {
     if (fileElem1) {
         fileElem1.click();
     }
-}, false);
+};
 
-// Again for the other button.
-const fileSelect2 = document.getElementById("fileSelect2"),
-    fileElem2 = document.getElementById("fileElem2");
+// If the button is set to process the text field, process the text and set the button back to file read mode.
+function processTextAreaAndResetButton1(e) {
+    fileSelect1.innerText = 'Load Solution File';
+    fileSelect1.addEventListener("click", clickPassCallback1, false);
+    fileSelect1.removeEventListener("click", processTextAreaAndResetButton1, false);
+    dictionarySolutions.addEventListener('input', prepareForUpdatedTextArea1, { once: true });
+    wordleDefaultSolutions.dictStr = dictionarySolutions.value;
+    processDictionary(wordleDefaultSolutions);
+    loadCurrentDictionaries();
+};
 
-fileSelect2.addEventListener("click", function (e) {
+// add listeners to the textareas and change the button behavior if the textarea is updated.
+function prepareForUpdatedTextArea1() {
+    fileSelect1.innerText = 'Process Dictionary';
+    fileSelect1.removeEventListener("click", clickPassCallback1, false);
+    fileSelect1.addEventListener("click", processTextAreaAndResetButton1, false);
+}
+
+// If the button is set to read a file, this passes the click through to the input element.
+function clickPassCallback2(e) {
     if (fileElem2) {
         fileElem2.click();
     }
-}, false);
+};
+
+// If the button is set to process the text field, process the text and set the button back to file read mode.
+function processTextAreaAndResetButton2(e) {
+    fileSelect2.innerText = 'Load Guesses File';
+    fileSelect2.addEventListener("click", clickPassCallback2, false);
+    fileSelect2.removeEventListener("click", processTextAreaAndResetButton2, false);
+    dictionaryGuesses.addEventListener('input', prepareForUpdatedTextArea2, { once: true });
+    wordleDefaultGuesses.dictStr = dictionaryGuesses.value;
+    processDictionary(wordleDefaultGuesses);
+    loadCurrentDictionaries();
+};
 
 // add listeners to the textareas and change the button behavior if the textarea is updated.
-// dictionarySolutions.addEventListener('input',() => {
-//     fileSelect1.innerText = 'Process Dictionary';
-// });
+function prepareForUpdatedTextArea2() {
+    fileSelect2.innerText = 'Process Dictionary';
+    fileSelect2.removeEventListener("click", clickPassCallback2, false);
+    fileSelect2.addEventListener("click", processTextAreaAndResetButton2, false);
+}
+
+// Set the buttons up for the first click.
+fileSelect1.addEventListener("click", clickPassCallback1, false);
+fileSelect2.addEventListener("click", clickPassCallback2, false);
+
+// Set up the textareas to detect updates.
+dictionarySolutions.addEventListener('input', prepareForUpdatedTextArea1, { once: true });
+dictionaryGuesses.addEventListener('input', prepareForUpdatedTextArea2, { once: true });
+
+// we need references to the callbacks so we can remove them later.
+const loadDictCallbackSolutions = loadDictionary(wordleDefaultSolutions);
+const loadDictCallbackGuesses = loadDictionary(wordleDefaultGuesses);
+
+// Get file loaders to be ready for the click.
+fileElem1.addEventListener("change", loadDictCallbackSolutions, false);
+fileElem2.addEventListener("change", loadDictCallbackGuesses, false);
+
+// Populate the textareas for first time on page load.
+loadCurrentDictionaries();
+
+
+// give the tiles focus if the user clicks them.
+const allTiles = document.querySelectorAll(".tile");
+for (let i = 0; i < allTiles.length; i++) {
+    allTiles[i].addEventListener('click', (e) => allTiles[i].focus());
+}
+
+// Capture any keypress.
+document.addEventListener("keydown", e => {
+    handleKeyInput(e);
+})
+
+// A closure to use for callbacks that need a particular dictionary.
+function loadDictionary(dict) {
+    return function () {
+        processFileForDict(this.files[0], dict);
+    }
+}
 
 // use a promise to wrap the file reader to avoid race conditions processing the contents.
 function readFileAsync(file) {
@@ -58,27 +120,22 @@ function readFileAsync(file) {
         };
         reader.onerror = reject;
         reader.readAsText(file);
-        // file.value = '';
     })
 }
 
+// Read the file into the dictionary, process the text, and then reload them on the page.
 async function processFileForDict(file, dict) {
     try {
+        // We want to block here so that we don't process the dictionary before the file contents have loaded into it.
         dict.dictStr = await readFileAsync(file);
         processDictionary(dict);
         loadCurrentDictionaries();
-        // alert(dict.dictStr);
     } catch (err) {
         console.log(err);
     }
 }
 
-function loadDictionary(dict) {
-    return function () {
-        processFileForDict(this.files[0], dict);
-    }
-}
-
+// Does the work of reading the string value of the dictionary, normalizing it, and then generating an equivalent array with the words.
 function processDictionary(dict) {
     // split on any non-alpha chars, remove non-5-letter words, convert to upper case, remove dupes, and sort.
     dict.dictArr = Array.from(
@@ -90,22 +147,7 @@ function processDictionary(dict) {
     dict.dictStr = dict.dictArr.join('\n');
 }
 
-fileElem1.addEventListener("change", loadDictionary(wordleDefaultSolutions), false);
-fileElem2.addEventListener("change", loadDictionary(wordleDefaultGuesses), false);
-
-
-loadCurrentDictionaries();
-
-
-const allTiles = document.querySelectorAll(".tile");
-for (let i = 0; i < allTiles.length; i++) {
-    allTiles[i].addEventListener('click', (e) => allTiles[i].focus());
-}
-
-document.addEventListener("keydown", e => {
-    handleKeyInput(e);
-})
-
+// When a key is pressed, do special things depending on key and focused element.
 function handleKeyInput(e) {
     const focusedElem = document.activeElement;
     if (!focusedElem) return;
@@ -125,13 +167,14 @@ function handleKeyInput(e) {
         if (key === 'Backspace' && textLength > 0) {
             para.textContent = para.textContent.slice(0, textLength - 1);
             formatTileText(para);
-        } else if (!(para.textContent.includes(key.toUpperCase())) && alphabet.includes(key) && textLength < maxLength) {
+        } else if (!(para.textContent.includes(key.toUpperCase())) && ALPHABET.includes(key) && textLength < maxLength) {
             para.textContent += key;
             formatTileText(para);
         }
     }
 }
 
+// Handle all the custom formatting we need to make the tiles look good.
 function formatTileText(p) {
     const rawText = p.textContent;
     const largeLetter = '40px';
@@ -158,6 +201,7 @@ function formatTileText(p) {
     }
 }
 
+// We need some special splicing action for strings. 
 if (!String.prototype.splice) {
     /**
      * {JSDoc}
@@ -174,6 +218,14 @@ if (!String.prototype.splice) {
     };
 }
 
+// Update the dictionary textareas from the dictionary variables. Call this anytime the data is manipulated.
+function loadCurrentDictionaries() {
+    dictionarySolutions.value = wordleDefaultSolutions.dictStr;
+    dictionaryGuesses.value = wordleDefaultGuesses.dictStr;
+    console.log(wordleDefaultSolutions);
+    console.log(wordleDefaultGuesses);
+}
+//TODO: Delete this.
 window.addEventListener('keydown', (e) => {
     console.log(e)
 })
