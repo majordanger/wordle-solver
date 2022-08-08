@@ -21,7 +21,7 @@
 <body>
   <div class="container p-1 shadow">
     <!-- BEGIN Top-level nav button tabs. -->
-    <ul class="nav justify-content-center nav-justified nav-pills mb-3 p-2" id="pills-tab" role="tablist">
+    <ul class="nav justify-content-center nav-justified nav-pills mb-3 p-0" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active top-nav-button rounded-0" id="pills-solver-tab" data-bs-toggle="pill"
           data-bs-target="#pills-solver" type="button" role="tab" aria-controls="pills-solver"
@@ -42,9 +42,8 @@
         <div class="row">
           <div class="column col-lg-6">
             <div class="wrapper">
-              <div class="row-label "><p>CORRECT</p></div>
-              <div class="tile c-tile wrap-tile" tabindex="0">
-                <p></p>
+              <div class="row-label ">
+                <p>CORRECT</p>
               </div>
               <div class="tile c-tile wrap-tile" tabindex="0">
                 <p></p>
@@ -58,7 +57,12 @@
               <div class="tile c-tile wrap-tile" tabindex="0">
                 <p></p>
               </div>
-              <div class="row-label"><p>MISPLACED</p></div>
+              <div class="tile c-tile wrap-tile" tabindex="0">
+                <p></p>
+              </div>
+              <div class="row-label">
+                <p>MISPLACED</p>
+              </div>
               <div class="tile m-tile wrap-tile" tabindex="0">
                 <p></p>
               </div>
@@ -74,7 +78,9 @@
               <div class="tile m-tile wrap-tile" tabindex="0">
                 <p></p>
               </div>
-              <div class="row-label"><p>INCORRECT</p></div>
+              <div class="row-label">
+                <p>INCORRECT</p>
+              </div>
               <div class="tile i-tile" id="incorrect-box" tabindex="0">
                 <p></p>
               </div>
@@ -91,16 +97,37 @@
       <!-- BEGIN Dictionary tab -->
       <div class="tab-pane fade" id="pills-dictionary" role="tabpanel" aria-labelledby="pills-dictionary-tab"
         tabindex="0">
-        <P>By Default the dictionaries from Wordle are used. If you are playing a variant of Wordle and wish to use a
-          different dictionary, either paste it into the field(s) below, or upload from a file. "Possible
-          Solutions" are the words that could be a Wordle solution. "Accepted Guesses" are words accepted by Wordle that
-          are valid words in the dictionary, but will never be the solution. The union of solutions and guesses
-          is the complete list of what a valid Wordle guess is. </P>
-        <P> You can choose to only use the "Possible Solutions"
-          column when using your own dictionary. As you enter guess information on the "Solver" tab, the solutions and
-          guesses dictionaries will reduce themselves. </P>
-        <P>Refresh the page to reset the solver and dictionary to defaults.</P>
-
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item text-bg-dark">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button class="accordion-button collapsed text-bg-dark border border-primary rounded-0 p-2" type="button"
+                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
+                aria-controls="flush-collapseOne">
+                Dictionary Instructions
+              </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+              data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body border border-primary">
+                <P>By default the dictionaries from Wordle are used. If you are playing a variant of Wordle and wish to
+                  use a
+                  different dictionary, either paste it into the field(s) below, or upload from a file. <strong>Possible
+                    Solutions</strong> are the words that could be a Wordle solution. <strong>Accepted Guesses</strong>
+                  are words accepted by
+                  Wordle that
+                  are valid words in the dictionary, but will never be the solution. The union of solutions and guesses
+                  is the complete list of what a valid Wordle guess is. </P>
+                <P> You can choose to only use the <strong>Possible Solutions</strong>
+                  column when using your own dictionary. As you enter guess information on the <strong>Solver</strong>
+                  tab, the
+                  solutions and
+                  guesses dictionaries will reduce themselves. </P>
+                <P>Refresh the page to reset the Solver and Dictionary to defaults.</P>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
         <div class="row">
           <div class="dictionary col-6">
             <p>
@@ -108,7 +135,7 @@
               <button id="fileSelect1" class="btn btn-secondary btn-sm rounded-0">Load Solution File</button>
             </p>
             <label for="solutions"><strong>Possible Solutions:</strong></label><br>
-            <textarea id="solutions" name="solutions" cols="7" rows="10"></textarea>
+            <textarea class="text-bg-light p-2" id="solutions" name="solutions" cols="7" rows="10"></textarea>
           </div>
           <div class="dictionary col-6">
             <p>
@@ -116,7 +143,7 @@
               <button id="fileSelect2" class="btn btn-secondary btn-sm rounded-0">Load Guesses File</button>
             </p>
             <label for="guesses"><strong>Accepted Guesses:</strong></label><br>
-            <textarea id="guesses" name="guesses" cols="7" rows="10"></textarea>
+            <textarea class="text-bg-light p-2" id="guesses" name="guesses" cols="7" rows="10"></textarea>
           </div>
         </div>
       </div>
