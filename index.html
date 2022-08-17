@@ -45,50 +45,105 @@
               <div class="row-label ">
                 <p>CORRECT</p>
               </div>
-              <div class="tile c-tile wrap-tile" tabindex="0">
+              <div class="tile c-tile wrap-tile" id="x0_y0" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile c-tile wrap-tile" tabindex="0">
+              <div class="tile c-tile wrap-tile" id="x1_y0" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile c-tile wrap-tile" tabindex="0">
+              <div class="tile c-tile wrap-tile" id="x2_y0" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile c-tile wrap-tile" tabindex="0">
+              <div class="tile c-tile wrap-tile" id="x3_y0" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile c-tile wrap-tile" tabindex="0">
+              <div class="tile c-tile wrap-tile" id="x4_y0" tabindex="0">
                 <p></p>
               </div>
               <div class="row-label">
                 <p>MISPLACED</p>
               </div>
-              <div class="tile m-tile wrap-tile" tabindex="0">
+              <div class="tile m-tile wrap-tile" id="x0_y1" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile m-tile wrap-tile" tabindex="0">
+              <div class="tile m-tile wrap-tile" id="x1_y1" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile m-tile wrap-tile" tabindex="0">
+              <div class="tile m-tile wrap-tile" id="x2_y1" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile m-tile wrap-tile" tabindex="0">
+              <div class="tile m-tile wrap-tile" id="x3_y1" tabindex="0">
                 <p></p>
               </div>
-              <div class="tile m-tile wrap-tile" tabindex="0">
+              <div class="tile m-tile wrap-tile" id="x4_y1" tabindex="0">
                 <p></p>
               </div>
               <div class="row-label">
                 <p>INCORRECT</p>
               </div>
-              <div class="tile i-tile" id="incorrect-box" tabindex="0">
+              <div class="tile i-tile" id="x0_y2" tabindex="0">
                 <p></p>
               </div>
             </div>
+
+            <p></p>
           </div>
-          <div class="column col-lg-6">STRATEGY STUFF<BR> Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-            Quod, laboriosam non. Molestiae omnis in iusto saepe doloremque, consequuntur neque distinctio tempore nisi.
-            Eum ullam nulla reiciendis iste ipsam, maxime voluptatum?
+          <div class="column col-lg-6">
+            <div class="accordion accordion-flush" id="accordionFlushSolve">
+              <div class="accordion-item text-bg-dark">
+                <h2 class="accordion-header" id="flush-headingSolve">
+                  <button class="accordion-button collapsed text-bg-dark border border-primary rounded-0 p-2"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSolve" aria-expanded="false"
+                    aria-controls="flush-collapseSolve">
+                    Choose a Strategy
+                  </button>
+                </h2>
+                <div id="flush-collapseSolve" class="accordion-collapse collapse" aria-labelledby="flush-headingSolve"
+                  data-bs-parent="#accordionFlushSolve">
+                  <div class="accordion-body border border-primary">
+                    <h1>Carley is super hot!!!</h1>
+                    <h1>Also smart and strong...</h1>
+                    <h1>She makes high-quality babies.</h1>
+                    <h1>Lucky me. :D</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p></p>
+            <form>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="strategySelection" value="gainInfo"
+                  id="strategySelection1" checked>
+                <label class="form-check-label" for="strategySelection1">
+                  Gain Information
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="strategySelection" value="reduceSpace"
+                  id="strategySelection2">
+                <label class="form-check-label" for="strategySelection2">
+                  Reduce Solution Space
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="useKnownInfo" value="useKnownInfo"
+                  id="useKnownInfo" checked>
+                <label class="form-check-label" for="useKnownInfo">
+                  Use Known Information in Guesses
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="onlyValidSols" value="onlyValidSols"
+                  id="onlyValidSols" checked>
+                <label class="form-check-label" for="onlyValidSols">
+                  Use Only Valid Solutions as Guesses
+                </label>
+              </div>
+              <button type="submit" id="compute" class="btn btn-primary btn-sm border border-primary rounded-0">Compute
+                Guesses</button>
+            </form>
+            <pre id="log">
+            </pre>
           </div>
         </div>
       </div>
@@ -97,17 +152,17 @@
       <!-- BEGIN Dictionary tab -->
       <div class="tab-pane fade" id="pills-dictionary" role="tabpanel" aria-labelledby="pills-dictionary-tab"
         tabindex="0">
-        <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion accordion-flush" id="accordionFlushDict">
           <div class="accordion-item text-bg-dark">
-            <h2 class="accordion-header" id="flush-headingOne">
+            <h2 class="accordion-header" id="flush-headingDict">
               <button class="accordion-button collapsed text-bg-dark border border-primary rounded-0 p-2" type="button"
-                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
-                aria-controls="flush-collapseOne">
+                data-bs-toggle="collapse" data-bs-target="#flush-collapseDict" aria-expanded="false"
+                aria-controls="flush-collapseDict">
                 Dictionary Instructions
               </button>
             </h2>
-            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-              data-bs-parent="#accordionFlushExample">
+            <div id="flush-collapseDict" class="accordion-collapse collapse" aria-labelledby="flush-headingDict"
+              data-bs-parent="#accordionFlushDict">
               <div class="accordion-body border border-primary">
                 <P>By default the dictionaries from Wordle are used. If you are playing a variant of Wordle and wish to
                   use a
@@ -132,7 +187,8 @@
           <div class="dictionary col-6">
             <p>
               <input type="file" id="fileElem1" style="display:none" onclick="this.value=null;">
-              <button id="fileSelect1" class="btn btn-secondary btn-sm rounded-0">Load Solution File</button>
+              <button id="fileSelect1" class="btn btn-primary btn-sm border border-primary rounded-0">Load Solution
+                File</button>
             </p>
             <label for="solutions"><strong>Possible Solutions:</strong></label><br>
             <textarea class="text-bg-light p-2" id="solutions" name="solutions" cols="7" rows="10"></textarea>
@@ -140,7 +196,8 @@
           <div class="dictionary col-6">
             <p>
               <input type="file" id="fileElem2" style="display:none" onclick="this.value=null;">
-              <button id="fileSelect2" class="btn btn-secondary btn-sm rounded-0">Load Guesses File</button>
+              <button id="fileSelect2" class="btn btn-primary btn-sm border border-primary rounded-0">Load Guesses
+                File</button>
             </p>
             <label for="guesses"><strong>Accepted Guesses:</strong></label><br>
             <textarea class="text-bg-light p-2" id="guesses" name="guesses" cols="7" rows="10"></textarea>

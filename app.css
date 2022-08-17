@@ -72,7 +72,7 @@ textarea {
     transform: translate(-50%, -50%);
 }
 
-.tile#incorrect-box {
+.tile#x0_y2 {
     grid-column-start: 2;
     grid-column-end: 7;
 }
