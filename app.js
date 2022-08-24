@@ -14,11 +14,16 @@ import {
     tileToIndex} 
     from './tileNav.js';
 import { wordleDefaultSolutions, wordleDefaultGuesses } from './dictionaries.js';
+import { Solver } from './solver.js';
 
 
 // The text areas.
 const dictionarySolutions = document.querySelector("#solutions");
 const dictionaryGuesses = document.querySelector("#guesses");
+
+// The counters below the text areas.
+const solutionCount = document.querySelector("#solutionCount");
+const guessesCount = document.querySelector("#guessesCount");
 
 // The standard file selector is ugly so hide it and replace it with a button. 
 // Add a listener to the button that in turn clicks the hidden selector.
@@ -28,6 +33,8 @@ const fileElem1 = document.getElementById("fileElem1");
 // Again for the other button.
 const fileSelect2 = document.getElementById("fileSelect2");
 const fileElem2 = document.getElementById("fileElem2");
+
+const solver = new Solver(wordleDefaultSolutions, wordleDefaultGuesses);
 
 // If the button is set to read a file, this passes the click through to the input element.
 function clickPassCallback1(e) {
@@ -185,7 +192,9 @@ if (!String.prototype.splice) {
 // Update the dictionary textareas from the dictionary variables. Call this anytime the data is manipulated.
 function loadCurrentDictionaries() {
     dictionarySolutions.value = wordleDefaultSolutions.dictStr;
+    solutionCount.textContent = 'Remaining: ' + wordleDefaultSolutions.dictArr.length;
     dictionaryGuesses.value = wordleDefaultGuesses.dictStr;
+    guessesCount.textContent = 'Remaining: ' + wordleDefaultGuesses.dictArr.length;
     console.log(wordleDefaultSolutions);
     console.log(wordleDefaultGuesses);
 }
@@ -195,16 +204,21 @@ window.addEventListener('keydown', (e) => {
 })
 
 const form = document.querySelector("form");
-const log = document.querySelector("#log");
+// const log = document.querySelector("#log");
 
 form.addEventListener("submit", (event) => {
     const data = new FormData(form);
     //   console.log(data.keys());
     //   console.log(data.getAll());
-    let output = "";
-    for (const entry of data) {
-        output = `${output}${entry[0]}=${entry[1]}\r`;
-    };
-    log.innerText = output;
+    // let output = "";
+    // for (const entry of data) {
+    //     output = `${output}${entry[0]}=${entry[1]}\r`;
+    // };
+    // log.innerText = output;
     event.preventDefault();
+    doSolver(data);
 }, false);
+
+function doSolver(params) {
+    solver.compute(params);
+}

@@ -133,6 +133,7 @@ function handleKeyInput(e) {
     }
 }
 
+// Handle focus navigation for any tile.
 function handleKeyInputForTileNav(key, elem) {
     let tileIndex = tileToIndex.get(elem.id);
     let tileID = elem.id;
@@ -152,6 +153,7 @@ function handleKeyInputForTileNav(key, elem) {
     document.querySelector('#' + tileID).focus();
 }
 
+// Determine the tile type and delegate handling the event.
 function handleKeyInputForTileCharOrBack(e, elem) {
     const para = elem.firstElementChild;
     const textLength = para.textContent.length;
