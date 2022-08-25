@@ -62,7 +62,6 @@ function updateMTile(key, elem) {
     } else if (!(p.textContent.includes(key.toUpperCase())) && ALPHABET.includes(key) && p.textContent.length < 12) {
         p.textContent += key;
         rawText = p.textContent;
-        console.log(p.textContent);
     }
 
     // Do special formatting for m-tiles.
@@ -101,10 +100,9 @@ function updateITile(key, elem) {
     } else if (!(p.textContent.includes(key.toUpperCase())) && ALPHABET.includes(key) && p.textContent.length < 26) {
         p.textContent += key;
         rawText = p.textContent;
-        console.log(p.textContent);
     }
 
-    // Do special formatting for m-tiles.
+    // Do special formatting for i-tiles.
     if (rawText.length <= 10) {
         p.style.fontSize = LARGE_TILE_LETTER;
         p.textContent = rawText.toUpperCase();

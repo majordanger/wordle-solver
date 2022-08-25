@@ -192,9 +192,9 @@ if (!String.prototype.splice) {
 // Update the dictionary textareas from the dictionary variables. Call this anytime the data is manipulated.
 function loadCurrentDictionaries() {
     dictionarySolutions.value = wordleDefaultSolutions.dictStr;
-    solutionCount.textContent = 'Remaining: ' + wordleDefaultSolutions.dictArr.length;
+    solutionCount.textContent = 'Total: ' + wordleDefaultSolutions.dictArr.length;
     dictionaryGuesses.value = wordleDefaultGuesses.dictStr;
-    guessesCount.textContent = 'Remaining: ' + wordleDefaultGuesses.dictArr.length;
+    guessesCount.textContent = 'Total: ' + wordleDefaultGuesses.dictArr.length;
     console.log(wordleDefaultSolutions);
     console.log(wordleDefaultGuesses);
 }

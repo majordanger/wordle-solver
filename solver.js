@@ -1,5 +1,5 @@
 class Solver {
-    constructor ( solsDict, guessDict) {
+    constructor(solsDict, guessDict) {
         this.solsDict = solsDict;
         this.guessDict = guessDict;
         this.strategy = '';
@@ -23,9 +23,11 @@ class Solver {
         );
         this.incorrectData = new Array(26);
         this.incorrectPara = document.querySelector("#x0_y2").firstElementChild;
+        this.solutionSet = new Set();
+        this.guessSet = new Set();
     }
 
-    compute ( params ) {
+    compute(params) {
         // Default with these off because the params may not contain an entry from the form input.
         this.useKnownInfo = false;
         this.onlyValidSols = false;
@@ -38,21 +40,64 @@ class Solver {
                 this.onlyValidSols = true;
             }
         };
-        this.getCurrentGuessDataFromInput();
+        this.#getCurrentGuessDataFromInput();
+        this.#constructSolutionAndGuessSets();
         console.log(this);
     }
 
-    getCurrentGuessDataFromInput () {
+    #getCurrentGuessDataFromInput() {
         for (let i = 0; i < this.correctData.length; i++) {
-            this.correctData[i] = this.correctParas[i].textContent; 
+            this.correctData[i] = this.correctParas[i].textContent;
         }
         for (let i = 0; i < this.misplacedData.length; i++) {
-            this.misplacedData[i] = this.misplacedParas[i].textContent; 
+            this.misplacedData[i] = this.misplacedParas[i].textContent;
         }
         this.incorrectData = this.incorrectPara.textContent;
-        console.log(this.incorrectData);
+        // console.log(this.incorrectData);
     }
 
+    #constructSolutionAndGuessSets() {
+        this.solutionSet = new Set(this.solsDict.dictArr);
+
+        if (this.useKnownInfo && this.onlyValidSols) {
+            this.#filterSetByKnownInfo(this.solutionSet);
+            this.guessSet = this.solutionSet;
+        } else if (this.useKnownInfo && !this.onlyValidSols) {
+            this.guessSet = new Set(this.guessDict.dictArr);
+            this.#filterSetByKnownInfo(this.solutionSet);
+            this.#filterSetByKnownInfo(this.guessSet);
+            this.guessSet = new Set([...this.solutionSet, ...this.guessSet]);
+        } else if (!this.useKnownInfo && !this.onlyValidSols) {
+            this.guessSet = new Set(this.guessDict.dictArr);
+            this.guessSet = new Set([...this.solutionSet, ...this.guessSet]);
+        } else if (!this.useKnownInfo && this.onlyValidSols) {
+            this.guessSet = this.solutionSet;
+        }
+
+    }
+
+    #filterSetByKnownInfo(set) {
+        outer: for (const item of set) {
+            for (let i = 0; i < 5; i++) {
+                if ((this.correctData[i].length === 1 && this.correctData[i] !== item[i]) || this.incorrectData.includes(item[i])) {
+                    // console.log(`${item},${i},${this.correctData[i]}removing`);
+                    set.delete(item);
+                    continue outer;
+                }
+            }
+            for (let i = 0; i < 5; i++) {
+                if (this.misplacedData[i].length >= 1) {
+                    for (let j = 0; j < this.misplacedData[i].length; j++) {
+                        if (this.misplacedData[i].includes(item[i]) || !item.includes(this.misplacedData[i][j])) {
+                            // console.log(`${item},i:${i},j:${j},${this.misplacedData[i]},removing`);
+                            set.delete(item);
+                            continue outer;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 export { Solver };
