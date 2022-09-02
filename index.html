@@ -35,6 +35,11 @@
     </ul>
     <!-- END Top-level nav button tabs. -->
 
+    <p>
+      Welcome to the Web's Best Wordle Solver!!! Enter the information you know, choose a strategy, and press
+      <strong>Compute Guesses</strong>
+    </p>
+
     <div class="tab-content" id="pills-tabContent">
       <!-- BEGIN Solver tab -->
       <div class="tab-pane fade show active" id="pills-solver" role="tabpanel" aria-labelledby="pills-solver-tab"
@@ -101,10 +106,8 @@
                 <div id="flush-collapseSolve" class="accordion-collapse collapse" aria-labelledby="flush-headingSolve"
                   data-bs-parent="#accordionFlushSolve">
                   <div class="accordion-body border border-primary">
-                    <h1>Carley is super hot!!!</h1>
-                    <h1>Also smart and strong...</h1>
-                    <h1>She makes high-quality babies.</h1>
-                    <h1>Lucky me. :D</h1>
+                    TODO add blip about repeat letters and how the temporal nature of yellow can't be accounted for 
+                    so we just let them be included in the answer pool.
                   </div>
                 </div>
               </div>
@@ -139,13 +142,21 @@
                   Use Only Valid Solutions as Guesses
                 </label>
               </div>
-              <button type="submit" id="compute" class="btn btn-primary btn-sm border border-primary rounded-0">Compute
-                Guesses</button>
+              <button type="submit" id="compute" class="btn btn-primary btn-md border border-primary rounded-0 col-6">
+                <span id="computeText">Compute Guesses</span>
+                <span id="computeComplete"></span>
+              </button>
+              <!-- <button class="btn btn-primary btn-md border border-primary rounded-0 col-6" type="button">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Computing...
+              </button> -->
             </form>
             <pre id="log">
             </pre>
           </div>
         </div>
+        <div id="message"></div>
+        <table class="table table-dark table-striped" id="outputTable"></table>
       </div>
 
       <!-- END Solver tab -->
@@ -173,10 +184,7 @@
                   are valid words in the dictionary, but will never be the solution. The union of solutions and guesses
                   is the complete list of what a valid Wordle guess is. </P>
                 <P> You can choose to only use the <strong>Possible Solutions</strong>
-                  column when using your own dictionary. As you enter guess information on the <strong>Solver</strong>
-                  tab, the
-                  solutions and
-                  guesses dictionaries will reduce themselves. </P>
+                  column when using your own dictionary.</P>
                 <P>Refresh the page to reset the Solver and Dictionary to defaults.</P>
               </div>
             </div>
@@ -187,7 +195,7 @@
           <div class="dictionary col-6">
             <p>
               <input type="file" id="fileElem1" style="display:none" onclick="this.value=null;">
-              <button id="fileSelect1" class="btn btn-primary btn-sm border border-primary rounded-0">Load Solution
+              <button id="fileSelect1" class="btn btn-primary btn-md border border-primary rounded-0">Load Solution
                 File</button>
             </p>
             <label for="solutions"><strong>Possible Solutions:</strong></label><br>
@@ -197,7 +205,7 @@
           <div class="dictionary col-6">
             <p>
               <input type="file" id="fileElem2" style="display:none" onclick="this.value=null;">
-              <button id="fileSelect2" class="btn btn-primary btn-sm border border-primary rounded-0">Load Guesses
+              <button id="fileSelect2" class="btn btn-primary btn-md border border-primary rounded-0">Load Guesses
                 File</button>
             </p>
             <label for="guesses"><strong>Accepted Guesses:</strong></label><br>

@@ -1,17 +1,18 @@
 import {
-    updateCTile, 
-    updateITile, 
-    updateMTile, 
-    handleKeyInput, 
-    handleKeyInputForTileCharOrBack, 
-    handleKeyInputForTileNav, 
-    ALPHABET, 
-    TILE_NAV_KEYS, 
-    LARGE_TILE_LETTER, 
-    MEDIUM_TILE_LETTER, 
-    SMALL_TILE_LETTER, 
-    indexToTile, 
-    tileToIndex} 
+    updateCTile,
+    updateITile,
+    updateMTile,
+    handleKeyInput,
+    handleKeyInputForTileCharOrBack,
+    handleKeyInputForTileNav,
+    ALPHABET,
+    TILE_NAV_KEYS,
+    LARGE_TILE_LETTER,
+    MEDIUM_TILE_LETTER,
+    SMALL_TILE_LETTER,
+    indexToTile,
+    tileToIndex
+}
     from './tileNav.js';
 import { wordleDefaultSolutions, wordleDefaultGuesses } from './dictionaries.js';
 import { Solver } from './solver.js';
@@ -205,20 +206,102 @@ window.addEventListener('keydown', (e) => {
 
 const form = document.querySelector("form");
 // const log = document.querySelector("#log");
+const table = document.querySelector("#outputTable");
+const message = document.querySelector("#message");
 
 form.addEventListener("submit", (event) => {
     const data = new FormData(form);
-    //   console.log(data.keys());
-    //   console.log(data.getAll());
-    // let output = "";
-    // for (const entry of data) {
-    //     output = `${output}${entry[0]}=${entry[1]}\r`;
-    // };
-    // log.innerText = output;
+    const computeButtonText = document.querySelector("#computeText");
+    const ccomputeButtonPerc = document.querySelector("#computeComplete");
     event.preventDefault();
-    doSolver(data);
+
+    // We're about to do potentially long-running work so swap in the spinner on the button.
+    computeButtonText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Computing...';
+    ccomputeButtonPerc.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+
+    let results = '';
+
+    table.innerHTML = '';
+    message.innerHTML = '';
+    results = doSolver(data);
+
+    const worker = new Worker('worker.js');
+
+    worker.onmessage = (event) => {
+        // result.textContent = event.data;
+        console.log(`Got: ${event.data}`);
+        if (event.data === 'DONE') {
+            computeButtonText.innerHTML = 'Compute Guesses';
+            ccomputeButtonPerc.innerText = '';
+            worker.terminate();
+        } else {
+            if (event.data < 10) {
+                ccomputeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
+            } else if (event.data < 100) {
+                ccomputeButtonPerc.innerHTML = `&nbsp;${event.data}%`;
+            } else {
+                ccomputeButtonPerc.innerHTML = `${event.data}%`;
+            }
+        }
+    };
+
+    worker.onerror = (error) => {
+        console.log(`Worker error: ${error.message}`);
+        throw error;
+    };
+
+    worker.postMessage('GO!');
+
+    // computeButton.innerHTML = 'Compute Guesses';
+    // table.innerHTML = '';
+    // message.innerHTML = '';
+
+    if (results.size > 0) {
+        // This only works in reverse order. JS is a delight.
+        generateTable(results);
+        generateTableHead();
+    } else {
+        message.innerHTML = "<strong>No results!</strong> Double check that you haven't put impossible/conflicting info into the solver, " +
+            "like the same letter in both CORRECT/MISPLACED and INCORRECT fields. If you are playing a variant game such as Dordle, you may be " +
+            "getting feedback from a larger dictionary than Wordle uses yielding zero results. Consider using an expanded dictionary if this is" +
+            " the case.";
+    }
 }, false);
 
 function doSolver(params) {
-    solver.compute(params);
+    return solver.compute(params);
+}
+
+function generateTableHead() {
+    const thead = table.createTHead();
+    const row = thead.insertRow();
+    const colHeads = ['Rank', 'Word', 'Score', 'Is Soln'];
+    for (let colHead of colHeads) {
+        let th = document.createElement("th");
+        let text = document.createTextNode(colHead);
+        th.appendChild(text);
+        row.appendChild(th);
+    }
+}
+
+function generateTable(data) {
+    // console.log(data);
+    const tableArr = Array.from(data).sort((a, b) => b[1] - a[1]);
+    // console.log(tableArr);
+    for (let i = 0; i < tableArr.length; i++) {
+        let row = table.insertRow();
+
+        let cell = row.insertCell();
+        let text = document.createTextNode(i + 1);
+        cell.appendChild(text);
+        cell = row.insertCell();
+        text = document.createTextNode(tableArr[i][0]);
+        cell.appendChild(text);
+        cell = row.insertCell();
+        text = document.createTextNode(tableArr[i][1]);
+        cell.appendChild(text);
+        cell = row.insertCell();
+        text = document.createTextNode(tableArr[i][2]);
+        cell.appendChild(text);
+    }
 }
