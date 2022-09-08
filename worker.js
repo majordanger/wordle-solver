@@ -7,7 +7,7 @@ self.onmessage = (e) => {
 
 async function test() {
     for (let i = 1; i <= 100; i++) {
-        await sleep(10);
+        await sleep(50);
         console.log("worker: Executed after 1 second");
         self.postMessage(i);
     }
@@ -19,13 +19,3 @@ function sleep(ms) {
         resolve => setTimeout(resolve, ms)
     );
 }
-
-// async function delayedGreeting() {
-//     console.log("Hello");
-//     await sleep(2000);
-//     console.log("World!");
-//     await sleep(2000);
-//     console.log("Goodbye!");
-// }
-
-// delayedGreeting();

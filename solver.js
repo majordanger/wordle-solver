@@ -48,7 +48,7 @@ class Solver {
         } else if (this.strategy === 'reduceSpace') {
             results = this.#reduceSpace();
         }
-        // console.log(results);
+        console.log(JSON.stringify(this));
         return results;
     }
 
@@ -79,7 +79,8 @@ class Solver {
         } else if (!this.useKnownInfo && this.onlyValidSols) {
             this.guessSet = this.solutionSet;
         }
-
+        // console.log(this.solutionSet);
+        // console.log(JSON.stringify([...this.solutionSet]));
     }
 
     #filterSetByKnownInfo(set) {

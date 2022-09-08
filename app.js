@@ -205,22 +205,21 @@ window.addEventListener('keydown', (e) => {
 })
 
 const form = document.querySelector("form");
-// const log = document.querySelector("#log");
 const table = document.querySelector("#outputTable");
 const message = document.querySelector("#message");
 
 form.addEventListener("submit", (event) => {
     const data = new FormData(form);
     const computeButtonText = document.querySelector("#computeText");
-    const ccomputeButtonPerc = document.querySelector("#computeComplete");
+    const computeButtonPerc = document.querySelector("#computeComplete");
     event.preventDefault();
 
     // We're about to do potentially long-running work so swap in the spinner on the button.
     computeButtonText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Computing...';
-    ccomputeButtonPerc.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+    computeButtonPerc.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
 
+    // Clear the display areas.
     let results = '';
-
     table.innerHTML = '';
     message.innerHTML = '';
     results = doSolver(data);
@@ -232,21 +231,22 @@ form.addEventListener("submit", (event) => {
         console.log(`Got: ${event.data}`);
         if (event.data === 'DONE') {
             computeButtonText.innerHTML = 'Compute Guesses';
-            ccomputeButtonPerc.innerText = '';
+            computeButtonPerc.innerText = '';
             worker.terminate();
         } else {
             if (event.data < 10) {
-                ccomputeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
+                computeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
             } else if (event.data < 100) {
-                ccomputeButtonPerc.innerHTML = `&nbsp;${event.data}%`;
+                computeButtonPerc.innerHTML = `&nbsp;${event.data}%`;
             } else {
-                ccomputeButtonPerc.innerHTML = `${event.data}%`;
+                computeButtonPerc.innerHTML = `${event.data}%`;
             }
         }
     };
 
     worker.onerror = (error) => {
         console.log(`Worker error: ${error.message}`);
+        worker.terminate();
         throw error;
     };
 

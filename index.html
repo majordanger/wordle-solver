@@ -106,7 +106,7 @@
                 <div id="flush-collapseSolve" class="accordion-collapse collapse" aria-labelledby="flush-headingSolve"
                   data-bs-parent="#accordionFlushSolve">
                   <div class="accordion-body border border-primary">
-                    TODO add blip about repeat letters and how the temporal nature of yellow can't be accounted for 
+                    TODO add blip about repeat letters and how the temporal nature of yellow can't be accounted for
                     so we just let them be included in the answer pool.
                   </div>
                 </div>
@@ -142,17 +142,17 @@
                   Use Only Valid Solutions as Guesses
                 </label>
               </div>
-              <button type="submit" id="compute" class="btn btn-primary btn-md border border-primary rounded-0 col-6">
-                <span id="computeText">Compute Guesses</span>
-                <span id="computeComplete"></span>
-              </button>
-              <!-- <button class="btn btn-primary btn-md border border-primary rounded-0 col-6" type="button">
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Computing...
-              </button> -->
+              <div class="btn-group col-12">
+                <button type="submit" id="compute" class="btn btn-primary btn-md border border-primary rounded-0 col-6">
+                  <span id="computeText">Compute Guesses</span>
+                  <span id="computeComplete" class="mono"></span>
+                </button>
+                <button type="button" id="stop" class="btn btn-danger btn-md border border-danger rounded-0 col-6"
+                  disabled>
+                  <span class="mono">STOP</span>
+                </button>
+              </div>
             </form>
-            <pre id="log">
-            </pre>
           </div>
         </div>
         <div id="message"></div>
@@ -188,6 +188,16 @@
                 <P>Refresh the page to reset the Solver and Dictionary to defaults.</P>
               </div>
             </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm">
+            <button class="btn btn-primary btn-md border border-primary rounded-0 col-12" id="dictionarySelect">Use
+              Expanded Dictionary</button>
+          </div>
+          <div class="col-sm">
+            <p id="dictionarySelectTip">Blah</p>
           </div>
         </div>
         <br>
