@@ -14,7 +14,7 @@ import {
     tileToIndex
 }
     from './tileNav.js';
-import { wordleDefaultSolutions, wordleDefaultGuesses } from './dictionaries.js';
+import { wordleDefaultSolutions, wordleDefaultGuesses, wordleDefaultSolutionsAlt, dictLastUpdated } from './dictionaries.js';
 import { Solver } from './solver.js';
 
 
@@ -199,6 +199,10 @@ function loadCurrentDictionaries() {
     console.log(wordleDefaultSolutions);
     console.log(wordleDefaultGuesses);
 }
+
+const lastUpdate = document.querySelector("#lastUpdated");
+lastUpdate.innerText = `Dictionaries last updated: ${dictLastUpdated}`;
+
 //TODO: Delete this.
 window.addEventListener('keydown', (e) => {
     console.log(e)
