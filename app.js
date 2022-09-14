@@ -35,6 +35,32 @@ const fileElem1 = document.getElementById("fileElem1");
 const fileSelect2 = document.getElementById("fileSelect2");
 const fileElem2 = document.getElementById("fileElem2");
 
+const dictSelectButton = document.querySelector("#dictionarySelect");
+
+// function useExpandedDictionary(e) {
+//     this.innerText = 'Use Wordle Dictionary';
+//     this.addEventListener("click", useWordleDictionary, false);
+//     this.removeEventListener("click", useExpandedDictionary, false);
+//     wordleDefaultSolutions.dictStr = wordleDefaultSolutionsAlt.value;
+//     wordleDefaultGuesses.dictStr = '';
+//     processDictionary(wordleDefaultSolutions);
+//     processDictionary(wordleDefaultGuesses);
+//     loadCurrentDictionaries();
+// }
+
+// function useWordleDictionary(e) {
+//     this.innerText = 'Use Expanded Dictionary';
+//     this.addEventListener("click", useExpandedDictionary), false;
+//     this.removeEventListener("click", useWordleDictionary, false);
+//     wordleDefaultSolutions.dictStr = wordleDefaultSolutions.value;
+//     wordleDefaultGuesses.dictStr = wordleDefaultGuesses.value;
+//     processDictionary(wordleDefaultSolutions);
+//     processDictionary(wordleDefaultGuesses);
+//     loadCurrentDictionaries();
+// }
+
+// dictSelectButton.addEventListener("click", useExpandedDictionary);
+
 const solver = new Solver(wordleDefaultSolutions, wordleDefaultGuesses);
 
 // If the button is set to read a file, this passes the click through to the input element.
