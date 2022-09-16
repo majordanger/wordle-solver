@@ -23,20 +23,20 @@
     <!-- BEGIN Top-level nav button tabs. -->
     <ul class="nav justify-content-center nav-justified nav-pills mb-3 p-0" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active top-nav-button border border-secondary rounded-0" id="pills-solver-tab" data-bs-toggle="pill"
-          data-bs-target="#pills-solver" type="button" role="tab" aria-controls="pills-solver"
+        <button class="nav-link active top-nav-button border border-primary rounded-0" id="pills-solver-tab"
+          data-bs-toggle="pill" data-bs-target="#pills-solver" type="button" role="tab" aria-controls="pills-solver"
           aria-selected="true">SOLVER</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link top-nav-button border border-secondary rounded-0" id="pills-dictionary-tab" data-bs-toggle="pill"
-          data-bs-target="#pills-dictionary" type="button" role="tab" aria-controls="pills-dictionary"
-          aria-selected="false">DICTIONARY</button>
+        <button class="nav-link top-nav-button border border-primary rounded-0" id="pills-dictionary-tab"
+          data-bs-toggle="pill" data-bs-target="#pills-dictionary" type="button" role="tab"
+          aria-controls="pills-dictionary" aria-selected="false">DICTIONARY</button>
       </li>
     </ul>
     <!-- END Top-level nav button tabs. -->
 
     <p>
-      Welcome to the Web's Best Wordle Solver!!! Enter the information you know, choose a strategy, and press
+      Welcome to the web's best Wordle solver!!! Enter the information you know, choose a strategy, and press
       <strong>Compute Guesses</strong>
     </p>
 
@@ -143,11 +143,12 @@
                 </label>
               </div>
               <div class="btn-group col-12">
-                <button type="submit" id="compute" class="btn btn-primary btn-md border border-secondary rounded-0 col-6">
+                <button type="submit" id="compute"
+                  class="btn btn-primary btn-md border border-primary rounded-0 col-6">
                   <span id="computeText">Compute Guesses</span>
                   <span id="computeComplete" class="mono"></span>
                 </button>
-                <button type="button" id="stop" class="btn btn-danger btn-md border border-secondary rounded-0 col-6"
+                <button type="button" id="stop" class="btn btn-danger btn-md border border-danger rounded-0 col-6"
                   disabled>
                   <span class="mono">STOP</span>
                 </button>
@@ -166,8 +167,8 @@
         <div class="accordion accordion-flush" id="accordionFlushDict">
           <div class="accordion-item text-bg-dark">
             <h2 class="accordion-header" id="flush-headingDict">
-              <button class="accordion-button collapsed text-bg-dark border border-secondary rounded-0 p-2" type="button"
-                data-bs-toggle="collapse" data-bs-target="#flush-collapseDict" aria-expanded="false"
+              <button class="accordion-button collapsed text-bg-dark border border-secondary rounded-0 p-2"
+                type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDict" aria-expanded="false"
                 aria-controls="flush-collapseDict">
                 Dictionary Instructions
               </button>
@@ -177,7 +178,8 @@
               <div class="accordion-body border border-secondary">
                 <P>By default the dictionaries from Wordle are used. If you are playing a variant of Wordle and wish to
                   use a
-                  different dictionary, either paste it into the field(s) below, or upload from a file. <strong>Possible
+                  different dictionary, either paste it into the field(s) below, upload from a file, or try the expanded
+                  dictionary. <strong>Possible
                     Solutions</strong> are the words that could be a Wordle solution. <strong>Accepted Guesses</strong>
                   are words accepted by
                   Wordle that
@@ -185,6 +187,10 @@
                   is the complete list of what a valid Wordle guess is. </P>
                 <P> You can choose to only use the <strong>Possible Solutions</strong>
                   column when using your own dictionary.</P>
+                <p>The expanded dictionary was created by downloading the most inclusive dictionary from <a
+                    href="http://app.aspell.net/create">aspell.net</a> possible combined with the current Wordle
+                  dictionaries. The expanded dictionary will include many words most people wouldn't consider useful.
+                </p>
                 <P>Refresh the page to reset the Solver and Dictionary to defaults.</P>
               </div>
             </div>
@@ -193,11 +199,13 @@
         <br>
         <div class="row">
           <div class="col-sm">
-            <button class="btn btn-primary btn-md border border-secondary rounded-0 col-12" id="dictionarySelect">Use
+            <button class="btn btn-primary btn-md border border-primary rounded-0 col-12" id="dictionarySelect">Use
               Expanded Dictionary</button>
           </div>
           <div class="col-sm">
-            <p id="dictionarySelectTip">Blah</p>
+            <p id="dictionarySelectTip">Use the expanded dictionary if you are playing a game that includes words not in
+              the wordle dictionary. DO NOT use the expanded dictionary with Wordle as it will return guesses that
+              Wordle will not accept.</p>
           </div>
         </div>
         <br>
@@ -205,21 +213,23 @@
           <div class="dictionary col-6">
             <p>
               <input type="file" id="fileElem1" style="display:none" onclick="this.value=null;">
-              <button id="fileSelect1" class="btn btn-primary btn-md border border-secondary rounded-0">Load Solution
+              <button id="fileSelect1" class="btn btn-primary btn-md border border-primary rounded-0">Load Solution
                 File</button>
             </p>
             <label for="solutions"><strong>Possible Solutions:</strong></label><br>
-            <textarea class="text-bg-dark p-2 border border-secondary" id="solutions" name="solutions" cols="7" rows="10"></textarea>
+            <textarea class="text-bg-dark p-2 border border-secondary" id="solutions" name="solutions" cols="7"
+              rows="10"></textarea>
             <div id="solutionCount"></div>
           </div>
           <div class="dictionary col-6">
             <p>
               <input type="file" id="fileElem2" style="display:none" onclick="this.value=null;">
-              <button id="fileSelect2" class="btn btn-primary btn-md border border-secondary rounded-0">Load Guesses
+              <button id="fileSelect2" class="btn btn-primary btn-md border border-primary rounded-0">Load Guesses
                 File</button>
             </p>
             <label for="guesses"><strong>Accepted Guesses:</strong></label><br>
-            <textarea class="text-bg-dark p-2 border border-secondary" id="guesses" name="guesses" cols="7" rows="10"></textarea>
+            <textarea class="text-bg-dark p-2 border border-secondary" id="guesses" name="guesses" cols="7"
+              rows="10"></textarea>
             <div id="guessesCount"></div>
           </div>
         </div>
