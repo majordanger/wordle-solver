@@ -48,7 +48,7 @@ class Solver {
         } else if (this.strategy === 'reduceSpace') {
             results = this.#reduceSpace();
         }
-        console.log(JSON.stringify(this));
+        // console.log(JSON.stringify(this));
         return results;
     }
 

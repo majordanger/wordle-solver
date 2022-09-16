@@ -14,7 +14,7 @@ import {
     tileToIndex
 }
     from './tileNav.js';
-import { wordleDefaultSolutions, wordleDefaultGuesses, wordleDefaultSolutionsAlt, dictLastUpdated } from './dictionaries.js';
+import { solutionsDictionary, guessesDictionary, expandedDictionary, dictLastUpdated } from './dictionaries.js';
 import { Solver } from './solver.js';
 
 
@@ -35,33 +35,38 @@ const fileElem1 = document.getElementById("fileElem1");
 const fileSelect2 = document.getElementById("fileSelect2");
 const fileElem2 = document.getElementById("fileElem2");
 
+
+// START Expanded dictionary button code.
 const dictSelectButton = document.querySelector("#dictionarySelect");
+const useExpandedDictionaryCallback = useExpandedDictionary.bind(null, dictSelectButton);
+const useWordleDictionaryCallback = useWordleDictionary.bind(null, dictSelectButton);
 
-// function useExpandedDictionary(e) {
-//     this.innerText = 'Use Wordle Dictionary';
-//     this.addEventListener("click", useWordleDictionary, false);
-//     this.removeEventListener("click", useExpandedDictionary, false);
-//     wordleDefaultSolutions.dictStr = wordleDefaultSolutionsAlt.value;
-//     wordleDefaultGuesses.dictStr = '';
-//     processDictionary(wordleDefaultSolutions);
-//     processDictionary(wordleDefaultGuesses);
-//     loadCurrentDictionaries();
-// }
+function useExpandedDictionary(elem) {
+    elem.innerText = 'Use Wordle Dictionary';
+    elem.addEventListener("click", useWordleDictionaryCallback);
+    elem.removeEventListener("click", useExpandedDictionaryCallback);
+    solutionsDictionary.dictStr = expandedDictionary.origDictStr;
+    guessesDictionary.dictStr = '';
+    processDictionary(solutionsDictionary);
+    processDictionary(guessesDictionary);
+    loadCurrentDictionaries();
+};
 
-// function useWordleDictionary(e) {
-//     this.innerText = 'Use Expanded Dictionary';
-//     this.addEventListener("click", useExpandedDictionary), false;
-//     this.removeEventListener("click", useWordleDictionary, false);
-//     wordleDefaultSolutions.dictStr = wordleDefaultSolutions.value;
-//     wordleDefaultGuesses.dictStr = wordleDefaultGuesses.value;
-//     processDictionary(wordleDefaultSolutions);
-//     processDictionary(wordleDefaultGuesses);
-//     loadCurrentDictionaries();
-// }
+function useWordleDictionary(elem) {
+    elem.innerText = 'Use Expanded Dictionary';
+    elem.addEventListener("click", useExpandedDictionaryCallback);
+    elem.removeEventListener("click", useWordleDictionaryCallback);
+    solutionsDictionary.dictStr = solutionsDictionary.origDictStr;
+    guessesDictionary.dictStr = guessesDictionary.origDictStr;
+    processDictionary(solutionsDictionary);
+    processDictionary(guessesDictionary);
+    loadCurrentDictionaries();
+};
 
-// dictSelectButton.addEventListener("click", useExpandedDictionary);
+dictSelectButton.addEventListener("click", useExpandedDictionaryCallback);
+// END Expanded dictionary button code.
 
-const solver = new Solver(wordleDefaultSolutions, wordleDefaultGuesses);
+const solver = new Solver(solutionsDictionary, guessesDictionary);
 
 // If the button is set to read a file, this passes the click through to the input element.
 function clickPassCallback1(e) {
@@ -76,8 +81,8 @@ function processTextAreaAndResetButton1(e) {
     fileSelect1.addEventListener("click", clickPassCallback1, false);
     fileSelect1.removeEventListener("click", processTextAreaAndResetButton1, false);
     dictionarySolutions.addEventListener('input', prepareForUpdatedTextArea1, { once: true });
-    wordleDefaultSolutions.dictStr = dictionarySolutions.value;
-    processDictionary(wordleDefaultSolutions);
+    solutionsDictionary.dictStr = dictionarySolutions.value;
+    processDictionary(solutionsDictionary);
     loadCurrentDictionaries();
 };
 
@@ -101,8 +106,8 @@ function processTextAreaAndResetButton2(e) {
     fileSelect2.addEventListener("click", clickPassCallback2, false);
     fileSelect2.removeEventListener("click", processTextAreaAndResetButton2, false);
     dictionaryGuesses.addEventListener('input', prepareForUpdatedTextArea2, { once: true });
-    wordleDefaultGuesses.dictStr = dictionaryGuesses.value;
-    processDictionary(wordleDefaultGuesses);
+    guessesDictionary.dictStr = dictionaryGuesses.value;
+    processDictionary(guessesDictionary);
     loadCurrentDictionaries();
 };
 
@@ -122,16 +127,18 @@ dictionarySolutions.addEventListener('input', prepareForUpdatedTextArea1, { once
 dictionaryGuesses.addEventListener('input', prepareForUpdatedTextArea2, { once: true });
 
 // we need references to the callbacks so we can remove them later.
-const loadDictCallbackSolutions = loadDictionary(wordleDefaultSolutions);
-const loadDictCallbackGuesses = loadDictionary(wordleDefaultGuesses);
+const loadDictCallbackSolutions = loadDictionary(solutionsDictionary);
+const loadDictCallbackGuesses = loadDictionary(guessesDictionary);
 
 // Get file loaders to be ready for the click.
 fileElem1.addEventListener("change", loadDictCallbackSolutions, false);
 fileElem2.addEventListener("change", loadDictCallbackGuesses, false);
 
 // Populate the textareas for first time on page load.
-processDictionary(wordleDefaultSolutions);
-processDictionary(wordleDefaultGuesses);
+solutionsDictionary.dictStr = solutionsDictionary.origDictStr;
+guessesDictionary.dictStr = guessesDictionary.origDictStr;
+processDictionary(solutionsDictionary);
+processDictionary(guessesDictionary);
 loadCurrentDictionaries();
 
 
@@ -218,12 +225,12 @@ if (!String.prototype.splice) {
 
 // Update the dictionary textareas from the dictionary variables. Call this anytime the data is manipulated.
 function loadCurrentDictionaries() {
-    dictionarySolutions.value = wordleDefaultSolutions.dictStr;
-    solutionCount.textContent = 'Total: ' + wordleDefaultSolutions.dictArr.length;
-    dictionaryGuesses.value = wordleDefaultGuesses.dictStr;
-    guessesCount.textContent = 'Total: ' + wordleDefaultGuesses.dictArr.length;
-    console.log(wordleDefaultSolutions);
-    console.log(wordleDefaultGuesses);
+    dictionarySolutions.value = solutionsDictionary.dictStr;
+    solutionCount.textContent = 'Total: ' + solutionsDictionary.dictArr.length;
+    dictionaryGuesses.value = guessesDictionary.dictStr;
+    guessesCount.textContent = 'Total: ' + guessesDictionary.dictArr.length;
+    console.log(solutionsDictionary);
+    console.log(guessesDictionary);
 }
 
 const lastUpdate = document.querySelector("#lastUpdated");
