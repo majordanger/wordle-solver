@@ -203,6 +203,7 @@ function processDictionary(dict) {
             .filter(word => word.length === 5)
             .map(word => word.toUpperCase())))
         .sort();
+    dict.origDictArr = [...dict.dictArr];
     dict.dictStr = dict.dictArr.join('\n');
 }
 

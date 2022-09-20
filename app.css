@@ -54,12 +54,13 @@ td {
 
 .c-tile {
     border-color: var(--bs-success);
-    font-size: 40px;
+    /* font-size: 40px; */
+    /* font-weight: bolder; */
 }
 
 .m-tile {
     border-color: var(--bs-warning);
-    font-size: 40px;
+    /* font-size: 40px; */
 }
 
 .i-tile {
@@ -69,7 +70,8 @@ td {
 .tile p {
     margin: 0;
     line-height: 85%;
-    font-weight: 400;
+    font-weight: bold;
+    /* font-weight: 400; */
     position: absolute;
     top: 50%;
     left: 50%;

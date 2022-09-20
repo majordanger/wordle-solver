@@ -2,9 +2,9 @@
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const TILE_NAV_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter', 'Backspace'];
 
-const LARGE_TILE_LETTER = '40px';
-const MEDIUM_TILE_LETTER = '22px';
-const SMALL_TILE_LETTER = '16px';
+const LARGE_TILE_LETTER = '46px';
+const MEDIUM_TILE_LETTER = '20px';
+const SMALL_TILE_LETTER = '15px';
 
 // Create a map and reverse map of the tiles for easier navigation.
 const indexToTile = new Map();
@@ -103,7 +103,7 @@ function updateITile(key, elem) {
     }
 
     // Do special formatting for i-tiles.
-    if (rawText.length <= 10) {
+    if (rawText.length <= 9) {
         p.style.fontSize = LARGE_TILE_LETTER;
         p.textContent = rawText.toUpperCase();
     } else if (rawText.length <= 18) {

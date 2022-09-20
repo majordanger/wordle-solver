@@ -64,23 +64,19 @@ class Solver {
 
     #constructSolutionAndGuessSets() {
         this.solutionSet = new Set(this.solsDict.dictArr);
+        this.#filterSetByKnownInfo(this.solutionSet);
 
         if (this.useKnownInfo && this.onlyValidSols) {
-            this.#filterSetByKnownInfo(this.solutionSet);
             this.guessSet = this.solutionSet;
         } else if (this.useKnownInfo && !this.onlyValidSols) {
             this.guessSet = new Set(this.guessDict.dictArr);
-            this.#filterSetByKnownInfo(this.solutionSet);
             this.#filterSetByKnownInfo(this.guessSet);
             this.guessSet = new Set([...this.solutionSet, ...this.guessSet]);
         } else if (!this.useKnownInfo && !this.onlyValidSols) {
-            this.guessSet = new Set(this.guessDict.dictArr);
-            this.guessSet = new Set([...this.solutionSet, ...this.guessSet]);
+            this.guessSet = new Set([...new Set(this.solsDict.origDictArr), ...new Set(this.guessDict.origDictArr)]);
         } else if (!this.useKnownInfo && this.onlyValidSols) {
-            this.guessSet = this.solutionSet;
+            this.guessSet = new Set(this.solsDict.origDictArr);
         }
-        // console.log(this.solutionSet);
-        // console.log(JSON.stringify([...this.solutionSet]));
     }
 
     #filterSetByKnownInfo(set) {
