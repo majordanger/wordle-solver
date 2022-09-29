@@ -66,7 +66,7 @@ function useWordleDictionary(elem) {
 dictSelectButton.addEventListener("click", useExpandedDictionaryCallback);
 // END Expanded dictionary button code.
 
-const solver = new Solver(solutionsDictionary, guessesDictionary);
+let solver;
 
 // If the button is set to read a file, this passes the click through to the input element.
 function clickPassCallback1(e) {
@@ -209,16 +209,6 @@ function processDictionary(dict) {
 
 // We need some special splicing action for strings. 
 if (!String.prototype.splice) {
-    /**
-     * {JSDoc}
-     *
-     * Insert a substring at the given start index.
-     *
-     * @this {String}
-     * @param {number} start Index to splice at.
-     * @param {string} subStr String to splice in.
-     * @return {string} The new string.
-     */
     String.prototype.splice = function (start, subStr) {
         return this.slice(0, start) + subStr + this.slice(start);
     };
@@ -247,67 +237,126 @@ const table = document.querySelector("#outputTable");
 const message = document.querySelector("#message");
 
 form.addEventListener("submit", (event) => {
+    // Get the form data and parse it into args to pass in to the solver. We can't pass the formdata to worker directly because structuredClone() doesn't work on it.
     const data = new FormData(form);
+    // Default with these off because the params may not contain an entry from the form input.
+    let useKnownInfo = false;
+    let onlyValidSols = false;
+    let strategy = '';
+    for (const entry of data) {
+        if (entry[0] === 'strategySelection') {
+            strategy = entry[1];
+        } else if (entry[0] === 'useKnownInfo') {
+            useKnownInfo = true;
+        } else if (entry[0] === 'onlyValidSols') {
+            onlyValidSols = true;
+        }
+    };
+
     const computeButtonText = document.querySelector("#computeText");
     const computeButtonPerc = document.querySelector("#computeComplete");
     event.preventDefault();
 
-    // We're about to do potentially long-running work so swap in the spinner on the button.
-    computeButtonText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Computing...';
-    computeButtonPerc.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
 
     // Clear the display areas.
     let results = '';
     table.innerHTML = '';
     message.innerHTML = '';
-    results = doSolver(data);
 
-    const worker = new Worker('worker.js');
+    getCurrentGuessDataFromInput();
 
-    worker.onmessage = (event) => {
-        // result.textContent = event.data;
-        console.log(`Got: ${event.data}`);
-        if (event.data === 'DONE') {
-            computeButtonText.innerHTML = 'Compute Guesses';
-            computeButtonPerc.innerText = '';
-            worker.terminate();
-        } else {
-            if (event.data < 10) {
-                computeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
-            } else if (event.data < 100) {
-                computeButtonPerc.innerHTML = `&nbsp;${event.data}%`;
+    // if (false) {
+    if (typeof (Worker) !== "undefined") {
+        console.log("Using Worker");
+        const worker = new Worker('worker.js', { type: 'module' });
+
+        worker.onmessage = (event) => {
+            if (typeof (event.data) !== 'number') {
+                computeButtonText.innerHTML = 'Compute Guesses';
+                computeButtonPerc.innerText = '';
+                results = event.data;
+                drawResults(results);
+                worker.terminate();
             } else {
-                computeButtonPerc.innerHTML = `${event.data}%`;
+                if (event.data < 10) {
+                    computeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
+                } else if (event.data < 100) {
+                    computeButtonPerc.innerHTML = `&nbsp;${event.data}%`;
+                } else {
+                    computeButtonPerc.innerHTML = `${event.data}%`;
+                }
             }
-        }
-    };
+        };
 
-    worker.onerror = (error) => {
-        console.log(`Worker error: ${error.message}`);
-        worker.terminate();
-        throw error;
-    };
+        worker.onerror = (error) => {
+            console.log(`Worker error: ${error.message}`);
+            worker.terminate();
+            throw error;
+        };
 
-    worker.postMessage('GO!');
+        // We're about to do potentially long-running work so swap in the spinner on the button.
+        computeButtonText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Computing...';
+        computeButtonPerc.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+
+        // console.log(...data);
+        worker.postMessage([strategy, useKnownInfo, onlyValidSols, correctData, misplacedData, incorrectData, solutionsDictionary.origDictArr, guessesDictionary.origDictArr]);
+
+        // computeButtonText.innerHTML = 'Compute Guesses';
+        // table.innerHTML = '';
+        // message.innerHTML = '';
+    } else {
+        console.log("Using non-Worker.");
+        solver = new Solver(strategy, useKnownInfo, onlyValidSols, correctData, misplacedData, incorrectData, solutionsDictionary.origDictArr, guessesDictionary.origDictArr);
+        results = solver.compute();
+        drawResults(results);
+    }
+
+    // const worker = new Worker('worker.js');
+
+    // worker.onmessage = (event) => {
+    //     // result.textContent = event.data;
+    //     console.log(`Got: ${event.data}`);
+    //     if (event.data === 'DONE') {
+    //         computeButtonText.innerHTML = 'Compute Guesses';
+    //         computeButtonPerc.innerText = '';
+    //         worker.terminate();
+    //     } else {
+    //         if (event.data < 10) {
+    //             computeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
+    //         } else if (event.data < 100) {
+    //             computeButtonPerc.innerHTML = `&nbsp;${event.data}%`;
+    //         } else {
+    //             computeButtonPerc.innerHTML = `${event.data}%`;
+    //         }
+    //     }
+    // };
+
+    // worker.onerror = (error) => {
+    //     console.log(`Worker error: ${error.message}`);
+    //     worker.terminate();
+    //     throw error;
+    // };
+
+    // worker.postMessage('GO!');
 
     // computeButton.innerHTML = 'Compute Guesses';
     // table.innerHTML = '';
     // message.innerHTML = '';
 
+    
+}, false);
+
+function drawResults (results) {
     if (results.size > 0) {
         // This only works in reverse order. JS is a delight.
         generateTable(results);
         generateTableHead();
     } else {
-        message.innerHTML = "<strong>No results!</strong> Double check that you haven't put impossible/conflicting info into the solver, " +
+        message.innerHTML = "<hr><strong>No results!</strong> Double check that you haven't put impossible/conflicting info into the solver, " +
             "like the same letter in both CORRECT/MISPLACED and INCORRECT fields. If you are playing a variant game such as Dordle, you may be " +
             "getting feedback from a larger dictionary than Wordle uses yielding zero results. Consider using an expanded dictionary if this is" +
             " the case.";
     }
-}, false);
-
-function doSolver(params) {
-    return solver.compute(params);
 }
 
 function generateTableHead() {
@@ -343,3 +392,36 @@ function generateTable(data) {
         cell.appendChild(text);
     }
 }
+
+const correctData = new Array(5);
+const correctParas = new Array(
+    document.querySelector("#x0_y0").firstElementChild,
+    document.querySelector("#x1_y0").firstElementChild,
+    document.querySelector("#x2_y0").firstElementChild,
+    document.querySelector("#x3_y0").firstElementChild,
+    document.querySelector("#x4_y0").firstElementChild
+);
+const misplacedData = new Array(5);
+const misplacedParas = new Array(
+    document.querySelector("#x0_y1").firstElementChild,
+    document.querySelector("#x1_y1").firstElementChild,
+    document.querySelector("#x2_y1").firstElementChild,
+    document.querySelector("#x3_y1").firstElementChild,
+    document.querySelector("#x4_y1").firstElementChild
+);
+let incorrectData = new Array(26);
+const incorrectPara = document.querySelector("#x0_y2").firstElementChild;
+
+function getCurrentGuessDataFromInput() {
+    for (let i = 0; i < correctData.length; i++) {
+        correctData[i] = correctParas[i].textContent;
+    }
+    for (let i = 0; i < misplacedData.length; i++) {
+        misplacedData[i] = misplacedParas[i].textContent;
+    }
+    incorrectData = incorrectPara.textContent;
+    // console.log('hi');
+    // console.log(`correct data: ${correctData}`);
+    // console.log(misplacedData);
+    // console.log(incorrectData);
+};
