@@ -15,7 +15,8 @@ import {
 }
     from './tileNav.js';
 import { solutionsDictionary, guessesDictionary, expandedDictionary, dictLastUpdated } from './dictionaries.js';
-import { Solver } from './solver.js';
+// import { Solver } from './solver.js';
+// self.importScripts('./solver.js');
 
 
 // The text areas.
@@ -253,22 +254,25 @@ form.addEventListener("submit", (event) => {
         }
     };
 
+    const computeButton = document.querySelector("#compute");
+    const stopButton = document.querySelector("#stop");
     const computeButtonText = document.querySelector("#computeText");
     const computeButtonPerc = document.querySelector("#computeComplete");
     event.preventDefault();
 
 
-    // Clear the display areas.
+    // // Clear the display areas.
     let results = '';
-    table.innerHTML = '';
-    message.innerHTML = '';
+    // table.innerHTML = '';
+    // message.innerHTML = '';
 
     getCurrentGuessDataFromInput();
 
     // if (false) {
     if (typeof (Worker) !== "undefined") {
         console.log("Using Worker");
-        const worker = new Worker('worker.js', { type: 'module' });
+        const worker = new Worker('./worker.js');
+        // const worker = new Worker('./worker.js', { type: 'module' });
 
         worker.onmessage = (event) => {
             if (typeof (event.data) !== 'number') {
@@ -347,6 +351,12 @@ form.addEventListener("submit", (event) => {
 }, false);
 
 function drawResults (results) {
+    
+    // Clear the display areas.
+    // let results = '';
+    table.innerHTML = '';
+    message.innerHTML = '';
+
     if (results.size > 0) {
         // This only works in reverse order. JS is a delight.
         generateTable(results);

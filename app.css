@@ -102,3 +102,9 @@ td {
 span.mono {
     font-family: 'Roboto Mono', monospace;
 }
+
+#about {
+    position: fixed;
+    bottom: 2px;
+    right: 2px;
+}

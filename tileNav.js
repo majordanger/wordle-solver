@@ -1,4 +1,3 @@
-
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const TILE_NAV_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter', 'Backspace'];
 
@@ -33,7 +32,7 @@ tileToIndex.set('x3_y1', 8);
 tileToIndex.set('x4_y1', 9);
 tileToIndex.set('x0_y2', 10);
 
-// Handle all the custom formatting we need to make the tiles look good.
+// Handle all the custom formatting we need to make the C tiles look good.
 function updateCTile(key, elem) {
     const p = elem.firstElementChild;
     if (ALPHABET.includes(key)) {
@@ -48,7 +47,7 @@ function updateCTile(key, elem) {
     }
 }
 
-// Handle all the custom formatting we need to make the tiles look good.
+// Handle all the custom formatting we need to make the M tiles look good.
 function updateMTile(key, elem) {
     const p = elem.firstElementChild;
     let rawText = p.textContent;
@@ -86,7 +85,7 @@ function updateMTile(key, elem) {
     }
 }
 
-// Handle all the custom formatting we need to make the tiles look good.
+// Handle all the custom formatting we need to make the I tile look good.
 function updateITile(key, elem) {
     const p = elem.firstElementChild;
     let rawText = p.textContent;
@@ -106,7 +105,7 @@ function updateITile(key, elem) {
     if (rawText.length <= 9) {
         p.style.fontSize = LARGE_TILE_LETTER;
         p.textContent = rawText.toUpperCase();
-    } else if (rawText.length <= 18) {
+    } else if (rawText.length <= 21) {
         p.style.fontSize = MEDIUM_TILE_LETTER;
         p.textContent = rawText.toUpperCase();
     } else {

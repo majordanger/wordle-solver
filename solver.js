@@ -78,7 +78,7 @@ class Solver {
             // We only interact with progress meter if we are using Worker and have the message callback to use.
             if (this.messageCallback) {
                 count++;
-                if ((Date.now() - lastTimestamp) > 1000) {
+                if ((Date.now() - lastTimestamp) > 200) {
                     lastTimestamp = Date.now();
                     this.messageCallback(Math.floor((count/size)*100));
                 }
@@ -151,6 +151,7 @@ class Solver {
                 score,
                 this.solutionSet.has(guessWord)]);
         }
+
         // console.log(results);
         return results;
     }
@@ -160,4 +161,4 @@ class Solver {
     }
 }
 
-export { Solver };
+// export { Solver };
