@@ -260,28 +260,38 @@ form.addEventListener("submit", (event) => {
     const computeButtonPerc = document.querySelector("#computeComplete");
     event.preventDefault();
 
-
-    // // Clear the display areas.
     let results = '';
-    // table.innerHTML = '';
-    // message.innerHTML = '';
-
     getCurrentGuessDataFromInput();
 
     // if (false) {
     if (typeof (Worker) !== "undefined") {
         console.log("Using Worker");
         const worker = new Worker('./worker.js');
-        // const worker = new Worker('./worker.js', { type: 'module' });
+        let buttonsSwitchedYet = false;
+    
+        const buttonChangeThreshold = 50;
 
         worker.onmessage = (event) => {
             if (typeof (event.data) !== 'number') {
                 computeButtonText.innerHTML = 'Compute Guesses';
                 computeButtonPerc.innerText = '';
+                computeButton.disabled = false;
+                stopButton.disabled = true;
                 results = event.data;
                 drawResults(results);
                 worker.terminate();
             } else {
+                // It's only worth switching to the spinner if the process is going to run for a while. 
+                if (!buttonsSwitchedYet) {
+                    if (event.data < buttonChangeThreshold) {
+                        buttonsSwitchedYet = true;
+                        // We're about to do potentially long-running work so swap in the spinner on the button.
+                        computeButtonText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Computing...';
+                        computeButtonPerc.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+                        computeButton.disabled = true;
+                        stopButton.disabled = false;
+                    }
+                }
                 if (event.data < 10) {
                     computeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
                 } else if (event.data < 100) {
@@ -298,9 +308,13 @@ form.addEventListener("submit", (event) => {
             throw error;
         };
 
-        // We're about to do potentially long-running work so swap in the spinner on the button.
-        computeButtonText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Computing...';
-        computeButtonPerc.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;';
+        stopButton.addEventListener('click', () => {
+            worker.terminate();
+            computeButton.disabled = false;
+            stopButton.disabled = true;
+            computeButtonText.innerHTML = 'Compute Guesses';
+            computeButtonPerc.innerText = '';
+        });
 
         // console.log(...data);
         worker.postMessage([strategy, useKnownInfo, onlyValidSols, correctData, misplacedData, incorrectData, solutionsDictionary.origDictArr, guessesDictionary.origDictArr]);
@@ -347,11 +361,11 @@ form.addEventListener("submit", (event) => {
     // table.innerHTML = '';
     // message.innerHTML = '';
 
-    
+
 }, false);
 
-function drawResults (results) {
-    
+function drawResults(results) {
+
     // Clear the display areas.
     // let results = '';
     table.innerHTML = '';

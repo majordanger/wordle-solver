@@ -72,13 +72,14 @@ class Solver {
         let count = 0;
         let lastTimestamp = Date.now();
         const size = this.guessSet.size;
+        const refreshEveryMS = 200;
 
         for (let guessWord of this.guessSet) {
 
             // We only interact with progress meter if we are using Worker and have the message callback to use.
             if (this.messageCallback) {
                 count++;
-                if ((Date.now() - lastTimestamp) > 200) {
+                if ((Date.now() - lastTimestamp) > refreshEveryMS) {
                     lastTimestamp = Date.now();
                     this.messageCallback(Math.floor((count/size)*100));
                 }
