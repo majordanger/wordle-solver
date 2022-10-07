@@ -15,8 +15,8 @@ class Solver {
 
     compute() {
         this.#constructSolutionAndGuessSets();
-        console.log(this.solutionSet);
-        console.log(this.guessSet);
+        // console.log(this.solutionSet);
+        // console.log(this.guessSet);
         let results = 'ERROR';
         if (this.strategy === 'gainInfo') {
             results = this.#gainInformation();
@@ -134,11 +134,6 @@ class Solver {
                 }
 
                 cumulativeScore += wordScore;
-                // console.log('====');
-                // console.log(targetLetterCountMap.entries());
-                // console.log(targetLetterIncorrectSet.entries());
-                // console.log(`G:${guessWord},S:${solWord},${wordScore}`);
-                // console.log('====');
             }
 
             // Avoid NaN.
@@ -152,8 +147,6 @@ class Solver {
                 score,
                 this.solutionSet.has(guessWord)]);
         }
-
-        // console.log(results);
         return results;
     }
 
@@ -161,5 +154,3 @@ class Solver {
         return [['test', 'data']];
     }
 }
-
-// export { Solver };

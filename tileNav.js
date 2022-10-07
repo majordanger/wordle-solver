@@ -68,6 +68,9 @@ function updateMTile(key, elem) {
         p.style.fontSize = LARGE_TILE_LETTER;
         p.textContent = rawText.toUpperCase();
     } else if (rawText.length === 2) {
+        p.style.fontSize = '28px';
+        p.textContent = rawText.toUpperCase();
+    } else if (rawText.length === 3) {
         p.style.fontSize = MEDIUM_TILE_LETTER;
         p.textContent = rawText.toUpperCase();
     } else if (rawText.length <= 4) {
@@ -104,6 +107,12 @@ function updateITile(key, elem) {
     // Do special formatting for i-tiles.
     if (rawText.length <= 9) {
         p.style.fontSize = LARGE_TILE_LETTER;
+        p.textContent = rawText.toUpperCase();
+    } else if (rawText.length <= 11) {
+        p.style.fontSize = '38px';
+        p.textContent = rawText.toUpperCase();
+    } else if (rawText.length <= 13) {
+        p.style.fontSize = '30px';
         p.textContent = rawText.toUpperCase();
     } else if (rawText.length <= 21) {
         p.style.fontSize = MEDIUM_TILE_LETTER;

@@ -268,7 +268,7 @@ form.addEventListener("submit", (event) => {
         console.log("Using Worker");
         const worker = new Worker('./worker.js');
         let buttonsSwitchedYet = false;
-    
+
         const buttonChangeThreshold = 50;
 
         worker.onmessage = (event) => {
@@ -277,6 +277,8 @@ form.addEventListener("submit", (event) => {
                 computeButtonPerc.innerText = '';
                 computeButton.disabled = false;
                 stopButton.disabled = true;
+                // clone the node and replace it with itself to get rid of event listeners.
+                stopButton.replaceWith(stopButton.cloneNode(true));
                 results = event.data;
                 drawResults(results);
                 worker.terminate();
@@ -312,6 +314,7 @@ form.addEventListener("submit", (event) => {
             worker.terminate();
             computeButton.disabled = false;
             stopButton.disabled = true;
+            stopButton.replaceWith(stopButton.cloneNode(true));
             computeButtonText.innerHTML = 'Compute Guesses';
             computeButtonPerc.innerText = '';
         });
@@ -328,41 +331,10 @@ form.addEventListener("submit", (event) => {
         results = solver.compute();
         drawResults(results);
     }
-
-    // const worker = new Worker('worker.js');
-
-    // worker.onmessage = (event) => {
-    //     // result.textContent = event.data;
-    //     console.log(`Got: ${event.data}`);
-    //     if (event.data === 'DONE') {
-    //         computeButtonText.innerHTML = 'Compute Guesses';
-    //         computeButtonPerc.innerText = '';
-    //         worker.terminate();
-    //     } else {
-    //         if (event.data < 10) {
-    //             computeButtonPerc.innerHTML = `&nbsp;&nbsp;${event.data}%`;
-    //         } else if (event.data < 100) {
-    //             computeButtonPerc.innerHTML = `&nbsp;${event.data}%`;
-    //         } else {
-    //             computeButtonPerc.innerHTML = `${event.data}%`;
-    //         }
-    //     }
-    // };
-
-    // worker.onerror = (error) => {
-    //     console.log(`Worker error: ${error.message}`);
-    //     worker.terminate();
-    //     throw error;
-    // };
-
-    // worker.postMessage('GO!');
-
-    // computeButton.innerHTML = 'Compute Guesses';
-    // table.innerHTML = '';
-    // message.innerHTML = '';
-
-
 }, false);
+
+// We're going to have to replace this guy everytime we get new results.
+let intersectionObserver = null;
 
 function drawResults(results) {
 
@@ -372,8 +344,34 @@ function drawResults(results) {
     message.innerHTML = '';
 
     if (results.size > 0) {
+        const tableArr = Array.from(results).sort((a, b) => b[1] - a[1]);
+        const intersectionObserverOptions = {
+            root: null,
+            threshold: 0,
+            rootMargin: '100px'
+        };
+        const intersectionObserverCallback = function (results) {
+            let counter = 0;
+            return function (entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    // console.log(entry.target);
+                    const lastRow = generateTable(results, counter);
+                    // console.log(lastRow);
+                    counter += 100;
+                    observer.unobserve(entry.target);
+                    if (lastRow) {
+                        observer.observe(lastRow);
+                    }
+                })
+            }
+        }(tableArr);
+        intersectionObserver = new IntersectionObserver(intersectionObserverCallback, intersectionObserverOptions);
+        intersectionObserver.observe(table);
         // This only works in reverse order. JS is a delight.
-        generateTable(results);
+        // generateTable(tableArr, 0);
         generateTableHead();
     } else {
         message.innerHTML = "<hr><strong>No results!</strong> Double check that you haven't put impossible/conflicting info into the solver, " +
@@ -395,25 +393,34 @@ function generateTableHead() {
     }
 }
 
-function generateTable(data) {
-    // console.log(data);
-    const tableArr = Array.from(data).sort((a, b) => b[1] - a[1]);
-    // console.log(tableArr);
-    for (let i = 0; i < tableArr.length; i++) {
-        let row = table.insertRow();
-
+// We want to do infinitie scrolling so add 100 rows at a time from the start index.
+function generateTable(data, startIndex) {
+    const endIndex = startIndex + 100;
+    let returnLastRow = true;
+    let row;
+    if (endIndex > data.size) {
+        returnLastRow = false;
+    }
+    for (let i = startIndex; i < data.length && i < endIndex; i++) {
+        row = table.insertRow();
         let cell = row.insertCell();
         let text = document.createTextNode(i + 1);
         cell.appendChild(text);
         cell = row.insertCell();
-        text = document.createTextNode(tableArr[i][0]);
+        text = document.createTextNode(data[i][0]);
         cell.appendChild(text);
         cell = row.insertCell();
-        text = document.createTextNode(tableArr[i][1]);
+        text = document.createTextNode(data[i][1]);
         cell.appendChild(text);
         cell = row.insertCell();
-        text = document.createTextNode(tableArr[i][2]);
+        text = document.createTextNode(data[i][2]);
         cell.appendChild(text);
+    }
+    // Return the last row if there are still rows to draw so that we can observe it.
+    if (returnLastRow) {
+        return row;
+    } else {
+        return null;
     }
 }
 
