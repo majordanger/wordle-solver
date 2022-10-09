@@ -269,7 +269,7 @@ form.addEventListener("submit", (event) => {
         const worker = new Worker('./worker.js');
         let buttonsSwitchedYet = false;
 
-        const buttonChangeThreshold = 50;
+        const buttonChangeThreshold = 50; //percent done.
 
         worker.onmessage = (event) => {
             if (typeof (event.data) !== 'number') {
@@ -350,9 +350,11 @@ function drawResults(results) {
             threshold: 0,
             rootMargin: '100px'
         };
+        // Create a closure with the counter of how far into the list we are and the results data.
         const intersectionObserverCallback = function (results) {
             let counter = 0;
             return function (entries, observer) {
+                // console.log(entries);
                 entries.forEach(entry => {
                     if (!entry.isIntersecting) {
                         return;
@@ -369,10 +371,11 @@ function drawResults(results) {
             }
         }(tableArr);
         intersectionObserver = new IntersectionObserver(intersectionObserverCallback, intersectionObserverOptions);
-        intersectionObserver.observe(table);
+        const tBody = generateTableHead();
+        intersectionObserver.observe(tBody);
         // This only works in reverse order. JS is a delight.
-        // generateTable(tableArr, 0);
-        generateTableHead();
+        // // generateTable(tableArr, 0);
+        // generateTableHead();
     } else {
         message.innerHTML = "<hr><strong>No results!</strong> Double check that you haven't put impossible/conflicting info into the solver, " +
             "like the same letter in both CORRECT/MISPLACED and INCORRECT fields. If you are playing a variant game such as Dordle, you may be " +
@@ -391,6 +394,8 @@ function generateTableHead() {
         th.appendChild(text);
         row.appendChild(th);
     }
+    // We need to create a return a body that can be observed and appended to.
+    return table.createTBody();
 }
 
 // We want to do infinitie scrolling so add 100 rows at a time from the start index.
@@ -402,7 +407,8 @@ function generateTable(data, startIndex) {
         returnLastRow = false;
     }
     for (let i = startIndex; i < data.length && i < endIndex; i++) {
-        row = table.insertRow();
+        row = table.tBodies[0].insertRow();
+
         let cell = row.insertCell();
         let text = document.createTextNode(i + 1);
         cell.appendChild(text);
@@ -416,6 +422,13 @@ function generateTable(data, startIndex) {
         text = document.createTextNode(data[i][2]);
         cell.appendChild(text);
     }
+
+
+    let test = document.getElementById("outputTable").getElementsByTagName('tbody');
+    // let test = document.getElementById("outputTable");
+    console.log(test);
+
+
     // Return the last row if there are still rows to draw so that we can observe it.
     if (returnLastRow) {
         return row;
