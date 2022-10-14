@@ -373,9 +373,8 @@ function drawResults(results) {
         intersectionObserver = new IntersectionObserver(intersectionObserverCallback, intersectionObserverOptions);
         const tBody = generateTableHead();
         intersectionObserver.observe(tBody);
-        // This only works in reverse order. JS is a delight.
-        // // generateTable(tableArr, 0);
-        // generateTableHead();
+        const resultStr = (results.size === 1 ? 'result' : 'results');
+        message.innerHTML = `<hr><center><strong>${results.size} ${resultStr}</strong></center><hr>`;
     } else {
         message.innerHTML = "<hr><strong>No results!</strong> Double check that you haven't put impossible/conflicting info into the solver, " +
             "like the same letter in both CORRECT/MISPLACED and INCORRECT fields. If you are playing a variant game such as Dordle, you may be " +

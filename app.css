@@ -108,3 +108,9 @@ span.mono {
     bottom: 2px;
     right: 2px;
 }
+
+.strategy-letters {
+    font-weight: bold;
+    font-family: 'Roboto Mono', monospace;
+    font-size: x-large;
+}

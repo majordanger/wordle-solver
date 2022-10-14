@@ -18,8 +18,8 @@ class Solver {
         // console.log(this.solutionSet);
         // console.log(this.guessSet);
         let results = 'ERROR';
-        if (this.strategy === 'gainInfo') {
-            results = this.#gainInformation();
+        if (this.strategy === 'letterMatch') {
+            results = this.#letterMatch();
         } else if (this.strategy === 'reduceSpace') {
             results = this.#reduceSpace();
         }
@@ -65,7 +65,7 @@ class Solver {
         }
     }
 
-    #gainInformation() {
+    #letterMatch() {
         const results = new Set();
 
         // Variables for progress meter.
