@@ -1,5 +1,5 @@
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const TILE_NAV_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter', 'Backspace'];
+const TILE_NAV_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter', 'Backspace', 'Delete', 'Enter'];
 
 const LARGE_TILE_LETTER = '46px';
 const MEDIUM_TILE_LETTER = '20px';
@@ -127,12 +127,19 @@ function updateITile(key, elem) {
 function handleKeyInput(e) {
     const focusedElem = document.activeElement;
     const key = e.key;
+    console.log(key);
+    
+    // If we are on a tile and the user presses enter, press Compute Guesses.
+    if (key === 'Enter') {
+        document.querySelector("#compute").click();
+        return;
+    }
 
     const keyIsNavKey = TILE_NAV_KEYS.includes(key);
     const keyIsCharKey = ALPHABET.includes(key);
 
     // Include backspace and space because we may want to delete a char from a tile-string;
-    if (keyIsCharKey || key === 'Backspace' || key === ' ') {
+    if (keyIsCharKey || key === 'Backspace' || key === ' ' || key === 'Delete') {
         handleKeyInputForTileCharOrBack(e, focusedElem);
     } else if (keyIsNavKey) {
         handleKeyInputForTileNav(key, focusedElem);
@@ -167,7 +174,10 @@ function handleKeyInputForTileCharOrBack(e, elem) {
     const isCTile = elem.classList.contains('c-tile');
     const isMTile = elem.classList.contains('m-tile');
     const isITile = elem.classList.contains('i-tile');
-    if (key === 'Backspace' && textLength === 0) {
+    if (key === 'Delete') {
+        // If Delete is pressed, blow away all tile content.
+        para.textContent = '';
+    } else if (key === 'Backspace' && textLength === 0) {
         handleKeyInputForTileNav('Backspace', elem);
     } else if (isCTile) {
         updateCTile(key, elem);
