@@ -17,7 +17,7 @@ textarea {
     font-size: 1rem;
 }
 
-td {
+#outputTable td {
     font-family: 'Roboto Mono', monospace;
 }
 
@@ -99,9 +99,9 @@ td {
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FBFBFB'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
 }
 
-span.mono {
+/* span.mono {
     font-family: 'Roboto Mono', monospace;
-}
+} */
 
 #about {
     position: fixed;
@@ -113,4 +113,12 @@ span.mono {
     font-weight: bold;
     font-family: 'Roboto Mono', monospace;
     font-size: x-large;
+}
+
+.inline {
+    /* box-sizing: content-box; */
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    /* line-height: 100px; */
 }

@@ -399,7 +399,7 @@
     <!-- About button trigger modal -->
     <button id="about" type="button" class="btn btn-primary btn-sm border border-primary rounded-0"
       data-bs-toggle="modal" data-bs-target="#aboutModal">
-      ABOUT
+      <strong>?</strong>
     </button>
 
     <!-- About modal -->
@@ -411,7 +411,48 @@
             <button type="button" class="btn-close rounded-0" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body border border-secondary text-bg-dark">
-            <p>This page is a labor of love, built with pure JS, CSS, HTML, and a sprinkle of Bootstrap.</p>
+            <h4>Hot Keys for Tile Navigation</h4>
+            <table class="table table-dark table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Key</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Up/Down<br>Left/Right</td>
+                  <td>Move focus to next tile on grid in pressed direction.</td>
+                </tr>
+                <tr>
+                  <td>Tab<br>Shift-Tab</td>
+                  <td>Advance tile forward or backward.</td>
+                </tr>
+                <tr>
+                  <td>Space</td>
+                  <td><div class="inline bg-success"></div><span> delete character and advance tile.</span><br>
+                    <div class="inline bg-warning"></div><span> advance tile.</span><br>
+                    <div class="inline bg-danger"></div><span> no effect.</span></td>
+                </tr>
+                <tr>
+                  <td>Backspace</td>
+                  <td>Delete one character from the tile or if empty, move backward one tile.</td>
+                </tr>
+                <tr>
+                  <td>Delete</td>
+                  <td>Clear all characters from the Tile.</td>
+                </tr>
+                <tr>
+                  <td>Enter</td>
+                  <td>Press the compute Guesses button.</td>
+                </tr>
+              </tbody>
+            </table>
+            <br>
+            <h4>Development</h4>
+            <p>This page is a labor of love, inspired by and dedicated to my loving wife who has put up with me building
+              it for far too long.</p>
+            <p>It is built with pure JS, CSS, HTML, and a sprinkle of Bootstrap.</p>
             <p>Report issues, suggestions, or check out the source code on my GitHub <a
                 href="https://github.com/majordanger/wordle-solver">page</a>.</p>
             <p>For more information about me, visit me on LinkedIn <a
