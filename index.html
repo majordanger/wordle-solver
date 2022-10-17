@@ -215,10 +215,11 @@
                     Since the solver doesn't know what words you guessed and in what order, we can't tell how many S's
                     there are. Did the <strong class=" text-warning">S</strong> become the <strong
                       class=" text-success">S</strong>? Don't know. If we knew the order of guesses and specific
-                    feedback to each guess, we could infer that there is only one <strong
-                      class=" text-success">S</strong>. In fact, the only way to make the solver understand this would
-                    be to put <strong class=" text-warning">S</strong> into all the other spaces which is feedback
-                    Wordle never directly gave us.
+                    feedback to each guess, we could sometimes infer that there is only one <strong
+                      class=" text-success">S</strong>, but in this case we can't. In fact, the only way to make the
+                    solver understand exactly one <strong>S</strong> would be to put <strong
+                      class=" text-warning">S</strong> into all the other spaces which is feedback Wordle never directly
+                    gave us.
                     <div style="text-align:center">
                       <span class="strategy-letters text-success">S</span><span
                         class="strategy-letters text-secondary">-</span><span
@@ -243,9 +244,6 @@
                     </p>
                     <p>So we make a minor trade gaining ease of use inputting data into the solver against perfect
                       results.</p>
-
-
-                    <!-- 30 TO 28 SENSE SISSY-->
 
                     <button class="btn btn-primary btn-sm border border-primary rounded-0 float-end" type="button"
                       data-bs-toggle="collapse" data-bs-target="#flush-collapseSolve" aria-expanded="false"
@@ -421,18 +419,29 @@
               </thead>
               <tbody>
                 <tr>
+                  <td>a-zA-Z</td>
+                  <td>
+                    <div class="inline bg-success"></div><span> Add or overwrite character and advance tile
+                      focus.</span><br>
+                    <div class="inline bg-warning"></div>
+                    <div class="inline bg-danger"></div><span> Append character.</span>
+                  </td>
+                </tr>
+                <tr>
                   <td>Up/Down<br>Left/Right</td>
-                  <td>Move focus to next tile on grid in pressed direction.</td>
+                  <td>Move tile focus on grid in pressed direction.</td>
                 </tr>
                 <tr>
                   <td>Tab<br>Shift-Tab</td>
-                  <td>Advance tile forward or backward.</td>
+                  <td>Advance tile focus forward or backward.</td>
                 </tr>
                 <tr>
                   <td>Space</td>
-                  <td><div class="inline bg-success"></div><span> delete character and advance tile.</span><br>
-                    <div class="inline bg-warning"></div><span> advance tile.</span><br>
-                    <div class="inline bg-danger"></div><span> no effect.</span></td>
+                  <td>
+                    <div class="inline bg-success"></div><span> Delete character and advance tile focus.</span><br>
+                    <div class="inline bg-warning"></div><span> Advance tile focus.</span><br>
+                    <div class="inline bg-danger"></div><span> No effect.</span>
+                  </td>
                 </tr>
                 <tr>
                   <td>Backspace</td>
@@ -446,11 +455,15 @@
                   <td>Enter</td>
                   <td>Press the compute Guesses button.</td>
                 </tr>
+                <tr>
+                  <td>? or /</td>
+                  <td>Open/close the About modal.</td>
+                </tr>
               </tbody>
             </table>
             <br>
             <h4>Development</h4>
-            <p>This page is a labor of love, inspired by and dedicated to my loving wife who has put up with me building
+            <p>This page is a labor of love, inspired by and dedicated to my loving wife who put up with me building
               it for far too long.</p>
             <p>It is built with pure JS, CSS, HTML, and a sprinkle of Bootstrap.</p>
             <p>Report issues, suggestions, or check out the source code on my GitHub <a

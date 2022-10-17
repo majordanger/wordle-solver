@@ -151,6 +151,12 @@ for (let i = 0; i < allTiles.length; i++) {
 
 // Capture any keypress.
 document.addEventListener("keydown", e => {
+
+    if (e.key === '?' || e.key ==='/') {
+        e.preventDefault();
+        document.querySelector('#about').click();
+    }
+    
     const focusedElem = document.activeElement;
     if (!focusedElem) return;
     if (!focusedElem.classList.contains('tile')) return;
