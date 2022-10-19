@@ -4,6 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="Interactive tool to allow users to solve wordle, dordle, or quordle puzzles by entering known information, selecting a strategy, and receiving ranked results of best next guesses. Includes a dictionary editor for flexibility with non-wordle puzzles.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +13,7 @@
     href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=Roboto:wght@100;200;300;400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <title>Wordle Helper</title>
+  <title>Wordle Solver</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <!-- Custom CSS -->
@@ -35,19 +37,184 @@
     </ul>
     <!-- END Top-level nav button tabs. -->
 
-
+<!-- 
     <div style="display: flex; justify-content: center;">
       <p>Welcome to the web's best Wordle solver!!! Enter the information you know, choose a
         strategy, and press
         <strong>Compute Guesses</strong>.
       </p>
-    </div>
+    </div> -->
 
 
     <div class="tab-content" id="pills-tabContent">
       <!-- BEGIN Solver tab -->
       <div class="tab-pane fade show active" id="pills-solver" role="tabpanel" aria-labelledby="pills-solver-tab"
         tabindex="0">
+        
+    <div style="display: flex; justify-content: center;">
+      <p>Welcome to the web's best Wordle solver!!! Enter the information you know, choose a
+        strategy, and press
+        <strong>Compute Guesses</strong>.
+      </p>
+    </div>
+        <div class="accordion accordion-flush" id="accordionFlushSolve">
+          <div class="accordion-item text-bg-dark">
+            <h2 class="accordion-header" id="flush-headingSolve">
+              <button class="accordion-button collapsed text-bg-dark border border-secondary rounded-0 p-2"
+                type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSolve" aria-expanded="false"
+                aria-controls="flush-collapseSolve">
+                Choose a Strategy
+              </button>
+            </h2>
+            <div id="flush-collapseSolve" class="accordion-collapse collapse" aria-labelledby="flush-headingSolve"
+              data-bs-parent="#accordionFlushSolve">
+              <div class="accordion-body border border-secondary">
+                <p>
+                  The strategies outlined here will all lead to finding the solution, but will get there in
+                  different ways. Experiment with different strategies and see what is the most fun for your
+                  personal style of play. If you aren't interested and just want a good hint, use the defaults.
+                </p>
+                <h4>Letter Match</h4>
+                <p>This strategy is intuitive and how most people play Wordle. The
+                  idea is to choose words that have letters which are found most frequently in the solution set
+                  words, and more accurately, choose words that have their letters in more frequent locations. This
+                  algorithm scores each word in the valid guess set (guesses and solutions) against
+                  all the words in the possible solutions set. The score is normalized by dividing the total score
+                  by the
+                  size of the solution set.</p>
+                <p>Words are scored as follows: 3 points for an exact match; 2 points for a
+                  letter that is included in the solution but incorrectly placed (credit is only given up to the
+                  total number of occurrences of the letter in the solution word matching the total number of
+                  occurrences in the guess word); 1 point for an incorrect letter as it eliminates solutions from
+                  the solution space; 0 points for repeat letters in the guess word that provide no additional info.
+                  The point values are somewhat arbitrary, and it is debatable whether two misplaced letters are
+                  more
+                  valuable than a single correctly placed letter, but most importantly:
+                <div style="text-align:center"><strong>CORRECT > MISPLACED > INCORRECT > DUPLICATE</strong></div>
+                </p>
+                <p>A perfect score is 15 indicating that the solution has been found.</p>
+                <p>For a more thorough explanation of the information theory behind this and the original idea for
+                  the scoring algorithm, read this <a
+                    href="https://medium.com/geekculture/the-best-wordle-opener-is-orate-5600c30695b6">medium.com
+                    article</a>
+                  medium.com article.</p>
+                <h4>Reduce Solution Space</h4>
+                <p>This strategy is less intuitive. Instead of choosing a guess word that has a lot of letters to
+                  likely match the solution, we pick a word where the average solution space size is the smallest
+                  after making the guess. Since we don't know what the solution is, we choose a word from the
+                  solution set, assume that it is not the solution, and figure out what the Wordle feedback for our
+                  guess would be. We can then reduce the solution set and count its size. Repeat for all words in
+                  the original solution set and average for the expected size after making the guess.</p>
+                <h4>Use Known Information in Guesses</h4>
+                <p>The solution space is always reduced by whatever information you have entered into the solver
+                  before computing the guesses. Toggling this on will similarly restrict the guess words used. E.g.
+                  if you have already made a guess and got the first letter correct as <strong
+                    class=" text-success">S</strong> then only guesses with the first letter <strong>S</strong> will
+                  be used.</p>
+                <p>If this is toggled off, the known information will be ignored and all guesses will be considered.
+                  This sometimes results in high-ranking words with <strong>Is Soln = false</strong>.</p>
+                <h4>Use Only Valid Solutions as Guesses</h4>
+                <p>Wordle uses two dictionaries. One is the set of words that can be the solution to the puzzle, and
+                  a second that it will allow as guesses but can't ever be the solution. Toggling this on restricts
+                  the words scored to only the solutions dictionary. The best
+                  guess is not always something that could be a solution!</p>
+                <h4>The Temporal Nature of Wordle Feedback</h4>
+                Wordle will only give misplaced letters credit up to the number of occurrences in the solution
+                word. E.g. if the solution is
+                <div style="text-align:center">
+                  <span class="strategy-letters text-success">ASIDE</span>
+                </div>
+                and the guess is
+                <div style="text-align:center">
+                  <span class="strategy-letters text-warning">S</span><span
+                    class="strategy-letters text-warning">A</span><span
+                    class="strategy-letters text-secondary">S</span><span
+                    class="strategy-letters text-secondary">S</span><span
+                    class="strategy-letters text-secondary">Y</span>
+                </div>
+                only the first occurrence of <strong class=" text-warning">S</strong> is coded yellow. Because
+                Wordle only provides feedback one guess at a time, it is possible for letters coded as misplaced to
+                become misses if they landed in the correct location elsewhere on a subsequent guess. E.g. if the
+                solution is
+                <div style="text-align:center">
+                  <span class="strategy-letters text-success">SPIED</span>
+                </div>
+                and the guesses are
+                <div style="text-align:center">
+                  <span class="strategy-letters text-secondary">U</span><span
+                    class="strategy-letters text-warning">S</span><span
+                    class="strategy-letters text-secondary">U</span><span
+                    class="strategy-letters text-secondary">A</span><span
+                    class="strategy-letters text-secondary">L</span>
+                </div>
+                <div style="text-align:center">
+                  <span class="strategy-letters text-success">S</span><span
+                    class="strategy-letters text-secondary">H</span><span
+                    class="strategy-letters text-secondary">O</span><span
+                    class="strategy-letters text-secondary">R</span><span
+                    class="strategy-letters text-secondary">T</span>
+                </div>
+                Then we would enter into the solver
+                <div style="text-align:center">
+                  <span class="strategy-letters text-success">S</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span>
+                </div>
+                <div style="text-align:center">
+                  <span class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-warning">S</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span>
+                </div>
+                <div style="text-align:center">
+                  <span class="strategy-letters text-danger">UALHORT</span>
+                </div>
+                Since the solver doesn't know what words you guessed and in what order, we can't tell how many S's
+                there are. Did the <strong class=" text-warning">S</strong> become the <strong
+                  class=" text-success">S</strong>? Don't know. If we knew the order of guesses and specific
+                feedback to each guess, we could sometimes infer that there is only one <strong
+                  class=" text-success">S</strong>, but in this case we can't. In fact, the only way to make the
+                solver understand exactly one <strong>S</strong> would be to put <strong
+                  class=" text-warning">S</strong> into all the other spaces which is feedback Wordle never directly
+                gave us.
+                <div style="text-align:center">
+                  <span class="strategy-letters text-success">S</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span>
+                </div>
+                <div style="text-align:center">
+                  <span class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-warning">S</span><span
+                    class="strategy-letters text-warning">S</span><span
+                    class="strategy-letters text-warning">S</span><span class="strategy-letters text-warning">S</span>
+                </div>
+                <div style="text-align:center">
+                  <span class="strategy-letters text-danger">UALHORT</span>
+                </div>
+                <p>How much does this matter? Not much as it turns out. If we choose <strong>Letter Match</strong>
+                  and <strong>Use Only Valid Solutions as Guesses</strong> as our strategies, the results are nearly
+                  identical. We overinclude by only two words, <strong>SENSE</strong> and <strong>SISSY</strong>,
+                  taking us from 28 to 30 possible solutions, and the extra words are are both dead last in rank.
+                </p>
+                <p>So we make a minor trade gaining ease of use inputting data into the solver against perfect
+                  results.</p>
+
+                <button class="btn btn-primary btn-sm border border-primary rounded-0 float-end" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#flush-collapseSolve" aria-expanded="false"
+                  aria-controls="flush-collapseSolve">
+                  CLOSE
+                </button>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
         <div class="row">
           <div class="column col-lg-6">
             <div class="wrapper">
@@ -98,163 +265,7 @@
             <p></p>
           </div>
           <div class="column col-lg-6">
-            <div class="accordion accordion-flush" id="accordionFlushSolve">
-              <div class="accordion-item text-bg-dark">
-                <h2 class="accordion-header" id="flush-headingSolve">
-                  <button class="accordion-button collapsed text-bg-dark border border-secondary rounded-0 p-2"
-                    type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSolve" aria-expanded="false"
-                    aria-controls="flush-collapseSolve">
-                    Choose a Strategy
-                  </button>
-                </h2>
-                <div id="flush-collapseSolve" class="accordion-collapse collapse" aria-labelledby="flush-headingSolve"
-                  data-bs-parent="#accordionFlushSolve">
-                  <div class="accordion-body border border-secondary">
-                    <p>
-                      The strategies outlined here will all lead to finding the solution, but will get there in
-                      different ways. Experiment with different strategies and see what is the most fun for your
-                      personal style of play. If you aren't interested and just want a good hint, use the defaults.
-                    </p>
-                    <h4>Letter Match</h4>
-                    <p>This strategy is intuitive and how most people play Wordle. The
-                      idea is to choose words that have letters which are found most frequently in the solution set
-                      words, and more accurately, choose words that have their letters in more frequent locations. This
-                      algorithm scores each word in the valid guess set (guesses and solutions) against
-                      all the words in the possible solutions set. The score is normalized by dividing the total score
-                      by the
-                      size of the solution set.</p>
-                    <p>Words are scored as follows: 3 points for an exact match; 2 points for a
-                      letter that is included in the solution but incorrectly placed (credit is only given up to the
-                      total number of occurrences of the letter in the solution word matching the total number of
-                      occurrences in the guess word); 1 point for an incorrect letter as it eliminates solutions from
-                      the solution space; 0 points for repeat letters in the guess word that provide no additional info.
-                      The point values are somewhat arbitrary, and it is debatable whether two misplaced letters are
-                      more
-                      valuable than a single correctly placed letter, but most importantly:
-                    <div style="text-align:center"><strong>CORRECT > MISPLACED > INCORRECT > DUPLICATE</strong></div>
-                    </p>
-                    <p>A perfect score is 15 indicating that the solution has been found.</p>
-                    <p>For a more thorough explanation of the information theory behind this and the original idea for
-                      the scoring algorithm, read <a
-                        href="https://medium.com/geekculture/the-best-wordle-opener-is-orate-5600c30695b6">this</a>
-                      medium.com article.</p>
-                    <h4>Reduce Solution Space</h4>
-                    <p>This strategy is less intuitive. Instead of choosing a guess word that has a lot of letters to
-                      likely match the solution, we pick a word where the average solution space size is the smallest
-                      after making the guess. Since we don't know what the solution is, we choose a word from the
-                      solution set, assume that it is not the solution, and figure out what the Wordle feedback for our
-                      guess would be. We can then reduce the solution set and count its size. Repeat for all words in
-                      the original solution set and average for the expected size after making the guess.</p>
-                    <h4>Use Known Information in Guesses</h4>
-                    <p>The solution space is always reduced by whatever information you have entered into the solver
-                      before computing the guesses. Toggling this on will similarly restrict the guess words used. E.g.
-                      if you have already made a guess and got the first letter correct as <strong
-                        class=" text-success">S</strong> then only guesses with the first letter <strong>S</strong> will
-                      be used.</p>
-                    <p>If this is toggled off, the known information will be ignored and all guesses will be considered.
-                      This sometimes results in high-ranking words with <strong>Is Soln = false</strong>.</p>
-                    <h4>Use Only Valid Solutions as Guesses</h4>
-                    <p>Wordle uses two dictionaries. One is the set of words that can be the solution to the puzzle, and
-                      a second that it will allow as guesses but can't ever be the solution. Toggling this on restricts
-                      the words scored to only the solutions dictionary. The best
-                      guess is not always something that could be a solution!</p>
-                    <h4>The Temporal Nature of Wordle Feedback</h4>
-                    Wordle will only give misplaced letters credit up to the number of occurrences in the solution
-                    word. E.g. if the solution is
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-success">ASIDE</span>
-                    </div>
-                    and the guess is
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-warning">S</span><span
-                        class="strategy-letters text-warning">A</span><span
-                        class="strategy-letters text-secondary">S</span><span
-                        class="strategy-letters text-secondary">S</span><span
-                        class="strategy-letters text-secondary">Y</span>
-                    </div>
-                    only the first occurrence of <strong class=" text-warning">S</strong> is coded yellow. Because
-                    Wordle only provides feedback one guess at a time, it is possible for letters coded as misplaced to
-                    become misses if they landed in the correct location elsewhere on a subsequent guess. E.g. if the
-                    solution is
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-success">SPIED</span>
-                    </div>
-                    and the guesses are
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-secondary">U</span><span
-                        class="strategy-letters text-warning">S</span><span
-                        class="strategy-letters text-secondary">U</span><span
-                        class="strategy-letters text-secondary">A</span><span
-                        class="strategy-letters text-secondary">L</span>
-                    </div>
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-success">S</span><span
-                        class="strategy-letters text-secondary">H</span><span
-                        class="strategy-letters text-secondary">O</span><span
-                        class="strategy-letters text-secondary">R</span><span
-                        class="strategy-letters text-secondary">T</span>
-                    </div>
-                    Then we would enter into the solver
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-success">S</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span>
-                    </div>
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-warning">S</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span>
-                    </div>
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-danger">UALHORT</span>
-                    </div>
-                    Since the solver doesn't know what words you guessed and in what order, we can't tell how many S's
-                    there are. Did the <strong class=" text-warning">S</strong> become the <strong
-                      class=" text-success">S</strong>? Don't know. If we knew the order of guesses and specific
-                    feedback to each guess, we could sometimes infer that there is only one <strong
-                      class=" text-success">S</strong>, but in this case we can't. In fact, the only way to make the
-                    solver understand exactly one <strong>S</strong> would be to put <strong
-                      class=" text-warning">S</strong> into all the other spaces which is feedback Wordle never directly
-                    gave us.
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-success">S</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-secondary">-</span>
-                    </div>
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-secondary">-</span><span
-                        class="strategy-letters text-warning">S</span><span
-                        class="strategy-letters text-warning">S</span><span
-                        class="strategy-letters text-warning">S</span><span
-                        class="strategy-letters text-warning">S</span>
-                    </div>
-                    <div style="text-align:center">
-                      <span class="strategy-letters text-danger">UALHORT</span>
-                    </div>
-                    <p>How much does this matter? Not much as it turns out. If we choose <strong>Letter Match</strong>
-                      and <strong>Use Only Valid Solutions as Guesses</strong> as our strategies, the results are nearly
-                      identical. We overinclude by only two words, <strong>SENSE</strong> and <strong>SISSY</strong>,
-                      taking us from 28 to 30 possible solutions, and the extra words are are both dead last in rank.
-                    </p>
-                    <p>So we make a minor trade gaining ease of use inputting data into the solver against perfect
-                      results.</p>
 
-                    <button class="btn btn-primary btn-sm border border-primary rounded-0 float-end" type="button"
-                      data-bs-toggle="collapse" data-bs-target="#flush-collapseSolve" aria-expanded="false"
-                      aria-controls="flush-collapseSolve">
-                      CLOSE
-                    </button>
-                    <br>
-                  </div>
-                </div>
-              </div>
-            </div>
             <p></p>
             <form>
               <div class="form-check">
@@ -306,6 +317,10 @@
       <!-- BEGIN Dictionary tab -->
       <div class="tab-pane fade" id="pills-dictionary" role="tabpanel" aria-labelledby="pills-dictionary-tab"
         tabindex="0">
+        
+    <div style="display: flex; justify-content: center;">
+      <p>Explore the <strong>Dictionary Instructions</strong> or use the Wordle defualts.</p>
+    </div>
         <div class="accordion accordion-flush" id="accordionFlushDict">
           <div class="accordion-item text-bg-dark">
             <h2 class="accordion-header" id="flush-headingDict">
@@ -466,10 +481,10 @@
             <p>This page is a labor of love, inspired by and dedicated to my loving wife who put up with me building
               it for far too long.</p>
             <p>It is built with pure JS, CSS, HTML, and a sprinkle of Bootstrap.</p>
-            <p>Report issues, suggestions, or check out the source code on my GitHub <a
-                href="https://github.com/majordanger/wordle-solver">page</a>.</p>
-            <p>For more information about me, visit me on LinkedIn <a
-                href="https://www.linkedin.com/in/dane-brandon-85170717/">here</a>.</p>
+            <p>Report issues, suggestions, or check out the source code on my <a
+                href="https://github.com/majordanger/wordle-solver">GitHub page for this project</a>.</p>
+            <p>For more information about me, visit me <a href="https://www.linkedin.com/in/dane-brandon-85170717/">me
+                on LinkedIn</a>.</p>
           </div>
           <div class="modal-footer text-bg-dark border border-secondary rounded-0">
             <button type="button" class="btn btn-sm btn-primary border border-primary rounded-0"
