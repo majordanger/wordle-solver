@@ -127,7 +127,6 @@ function updateITile(key, elem) {
 function handleKeyInput(e) {
     const focusedElem = document.activeElement;
     const key = e.key;
-    console.log(key);
     
     // If we are on a tile and the user presses enter, press Compute Guesses.
     if (key === 'Enter') {

@@ -1,4 +1,3 @@
-// import { Solver } from './solver.js';
 self.importScripts('./solver.js');
 
 self.onmessage = (e) => {

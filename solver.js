@@ -172,8 +172,6 @@ class Solver {
 
             let cumulativeScore = 0;
             for (let solWord of this.solutionSet) {
-                // console.log('===============');
-                // console.log(this.solutionSet);
                 // Working variables. Start with what was passed in. We need to reset them for each new word comparison.
                 let workingSolsSet = new Set(this.solutionSet);
                 // console.log(workingSolsSet);
@@ -181,39 +179,20 @@ class Solver {
                 let misplaced = [...this.misplacedData];
                 let incorrect = [...this.incorrectData];
 
-                // console.log(`g: ${guessWord}`);
-                // console.log(`s: ${solWord}`);
-
+                // Since we are making a guess against a target, we need new known info about the guess combined with what was passed in.
                 for (let i = 0; i < guessWord.length; i++) {
                     if (guessWord[i] === solWord[i]) {
                         correct[i] = guessWord[i];
                     } else if (solWord.includes(guessWord[i]) && guessWord[i] !== solWord[i] && !misplaced[i].includes(guessWord[i])) {
                         misplaced[i] += guessWord[i];
-                    } else if (!solWord.includes(guessWord[i]) && !incorrect.includes(guessWord[i])){
+                    } else if (!solWord.includes(guessWord[i]) && !incorrect.includes(guessWord[i])) {
                         incorrect += guessWord[i];
                     }
                 }
 
-                // console.log('before:');
-                // console.log(workingSolsSet);
+                // Now we can filter the working set on the new known info and evaluate the size of the results.
                 this.#filterSetByKnownInfo(workingSolsSet, correct, misplaced, incorrect);
-
-                // solWord.includes(guessWord[i])
-
-                // console.log(`correct: ${correct}`);
-                // console.log(`misplaced: ${misplaced}`);
-                // console.log(`incorrect: ${incorrect}`);
-                
-                // console.log('after:');
-                // console.log(workingSolsSet);
-                // console.log('===============');
-                // console.log(`current set score:${workingSolsSet.size}`);
-                // console.log(`${}`);
-
-
-
                 cumulativeScore += workingSolsSet.size;
-                // console.log(`${cumulativeScore}`);
             }
 
             // Avoid NaN.

@@ -37,7 +37,7 @@
     </ul>
     <!-- END Top-level nav button tabs. -->
 
-<!-- 
+    <!-- 
     <div style="display: flex; justify-content: center;">
       <p>Welcome to the web's best Wordle solver!!! Enter the information you know, choose a
         strategy, and press
@@ -50,13 +50,13 @@
       <!-- BEGIN Solver tab -->
       <div class="tab-pane fade show active" id="pills-solver" role="tabpanel" aria-labelledby="pills-solver-tab"
         tabindex="0">
-        
-    <div style="display: flex; justify-content: center;">
-      <p>Welcome to the web's best Wordle solver!!! Enter the information you know, choose a
-        strategy, and press
-        <strong>Compute Guesses</strong>.
-      </p>
-    </div>
+
+        <div style="display: flex; justify-content: center;">
+          <p>Welcome to the web's best Wordle solver!!! Enter the information you know, choose a
+            strategy, and press
+            <strong>Compute Guesses</strong>.
+          </p>
+        </div>
         <div class="accordion accordion-flush" id="accordionFlushSolve">
           <div class="accordion-item text-bg-dark">
             <h2 class="accordion-header" id="flush-headingSolve">
@@ -105,6 +105,9 @@
                   solution set, assume that it is not the solution, and figure out what the Wordle feedback for our
                   guess would be. We can then reduce the solution set and count its size. Repeat for all words in
                   the original solution set and average for the expected size after making the guess.</p>
+                <p><strong>Warning:</strong> This is computationaly intense and will run slowly if you have zero known
+                  information in the solver. If you are using only valid solutions, choose <strong>RAISE</strong> as the
+                  first guess. If not restricting to only valid solutions, choose <strong>ROATE</strong>.</p>
                 <h4>Use Known Information in Guesses</h4>
                 <p>The solution space is always reduced by whatever information you have entered into the solver
                   before computing the guesses. Toggling this on will similarly restrict the guess words used. E.g.
@@ -113,6 +116,27 @@
                   be used.</p>
                 <p>If this is toggled off, the known information will be ignored and all guesses will be considered.
                   This sometimes results in high-ranking words with <strong>Is Soln = false</strong>.</p>
+                The score reported is the average size of the solution set after making the guess, so the perfect
+                score is <strong>1.00</strong> but this doesn't mean the solution has been found. Consider a solver with
+                the known info
+                <div style="text-align:center">
+                  <span class="strategy-letters text-success">S</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-success">S</span><span
+                    class="strategy-letters text-secondary">-</span><span
+                    class="strategy-letters text-secondary">-</span>
+                </div>
+                <p>
+                  with strategy<br>
+                  <strong>Reduce Solution Space</strong><br>
+                  <strong> Known Information in Guesses</strong><br>
+                  <strong>Use Only Valid Solutions as Guesses</strong>
+                </p>
+                <p>
+                  there would be only three remaining solutions: <strong>SASSY</strong>, <strong>SISSY</strong>, and
+                  <strong>SUSHI</strong>. Using any of them as the guess would leave only one possibility if it were not
+                  the solution itself.
+                </p>
                 <h4>Use Only Valid Solutions as Guesses</h4>
                 <p>Wordle uses two dictionaries. One is the set of words that can be the solution to the puzzle, and
                   a second that it will allow as guesses but can't ever be the solution. Toggling this on restricts
@@ -317,10 +341,10 @@
       <!-- BEGIN Dictionary tab -->
       <div class="tab-pane fade" id="pills-dictionary" role="tabpanel" aria-labelledby="pills-dictionary-tab"
         tabindex="0">
-        
-    <div style="display: flex; justify-content: center;">
-      <p>Explore the <strong>Dictionary Instructions</strong> or use the Wordle defualts.</p>
-    </div>
+
+        <div style="display: flex; justify-content: center;">
+          <p>Explore the <strong>Dictionary Instructions</strong> or use the Wordle defualts.</p>
+        </div>
         <div class="accordion accordion-flush" id="accordionFlushDict">
           <div class="accordion-item text-bg-dark">
             <h2 class="accordion-header" id="flush-headingDict">
@@ -483,7 +507,7 @@
             <p>It is built with pure JS, CSS, HTML, and a sprinkle of Bootstrap.</p>
             <p>Report issues, suggestions, or check out the source code on my <a
                 href="https://github.com/majordanger/wordle-solver">GitHub page for this project</a>.</p>
-            <p>For more information about me, visit me <a href="https://www.linkedin.com/in/dane-brandon-85170717/">me
+            <p>For more information about me, visit <a href="https://www.linkedin.com/in/dane-brandon-85170717/">me
                 on LinkedIn</a>.</p>
           </div>
           <div class="modal-footer text-bg-dark border border-secondary rounded-0">

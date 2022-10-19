@@ -15,8 +15,6 @@ import {
 }
     from './tileNav.js';
 import { solutionsDictionary, guessesDictionary, expandedDictionary, dictLastUpdated } from './dictionaries.js';
-// import { Solver } from './solver.js';
-// self.importScripts('./solver.js');
 
 
 // The text areas.
@@ -152,11 +150,11 @@ for (let i = 0; i < allTiles.length; i++) {
 // Capture any keypress.
 document.addEventListener("keydown", e => {
 
-    if (e.key === '?' || e.key ==='/') {
+    if (e.key === '?' || e.key === '/') {
         e.preventDefault();
         document.querySelector('#about').click();
     }
-    
+
     const focusedElem = document.activeElement;
     if (!focusedElem) return;
     if (!focusedElem.classList.contains('tile')) return;
@@ -227,17 +225,15 @@ function loadCurrentDictionaries() {
     solutionCount.textContent = 'Total: ' + solutionsDictionary.dictArr.length;
     dictionaryGuesses.value = guessesDictionary.dictStr;
     guessesCount.textContent = 'Total: ' + guessesDictionary.dictArr.length;
-    console.log(solutionsDictionary);
-    console.log(guessesDictionary);
 }
 
 const lastUpdate = document.querySelector("#lastUpdated");
 lastUpdate.innerText = `Dictionaries last updated: ${dictLastUpdated}`;
 
 //TODO: Delete this.
-window.addEventListener('keydown', (e) => {
-    console.log(e)
-})
+// window.addEventListener('keydown', (e) => {
+//     console.log(e)
+// })
 
 const form = document.querySelector("form");
 const table = document.querySelector("#outputTable");
@@ -286,7 +282,7 @@ form.addEventListener("submit", (event) => {
                 // clone the node and replace it with itself to get rid of event listeners.
                 stopButton.replaceWith(stopButton.cloneNode(true));
                 results = event.data;
-                drawResults(results);
+                drawResults(results, strategy);
                 worker.terminate();
             } else {
                 // It's only worth switching to the spinner if the process is going to run for a while. 
@@ -325,32 +321,32 @@ form.addEventListener("submit", (event) => {
             computeButtonPerc.innerText = '';
         });
 
-        // console.log(...data);
         worker.postMessage([strategy, useKnownInfo, onlyValidSols, correctData, misplacedData, incorrectData, solutionsDictionary.origDictArr, guessesDictionary.origDictArr]);
 
-        // computeButtonText.innerHTML = 'Compute Guesses';
-        // table.innerHTML = '';
-        // message.innerHTML = '';
     } else {
         console.log("Using non-Worker.");
         solver = new Solver(strategy, useKnownInfo, onlyValidSols, correctData, misplacedData, incorrectData, solutionsDictionary.origDictArr, guessesDictionary.origDictArr);
         results = solver.compute();
-        drawResults(results);
+        drawResults(results, strategy);
     }
 }, false);
 
 // We're going to have to replace this guy everytime we get new results.
 let intersectionObserver = null;
 
-function drawResults(results) {
+function drawResults(results, strategy) {
 
     // Clear the display areas.
-    // let results = '';
     table.innerHTML = '';
     message.innerHTML = '';
 
     if (results.size > 0) {
-        const tableArr = Array.from(results).sort((a, b) => b[1] - a[1]);
+        let tableArr = null;
+        if (strategy === 'letterMatch') {
+            tableArr = Array.from(results).sort((a, b) => b[1] - a[1]);
+        } else if (strategy === 'reduceSpace') {
+            tableArr = Array.from(results).sort((a, b) => a[1] - b[1]);
+        }
         const intersectionObserverOptions = {
             root: null,
             threshold: 0,
@@ -360,14 +356,11 @@ function drawResults(results) {
         const intersectionObserverCallback = function (results) {
             let counter = 0;
             return function (entries, observer) {
-                // console.log(entries);
                 entries.forEach(entry => {
                     if (!entry.isIntersecting) {
                         return;
                     }
-                    // console.log(entry.target);
                     const lastRow = generateTable(results, counter);
-                    // console.log(lastRow);
                     counter += 100;
                     observer.unobserve(entry.target);
                     if (lastRow) {
@@ -429,10 +422,8 @@ function generateTable(data, startIndex) {
     }
 
 
-    let test = document.getElementById("outputTable").getElementsByTagName('tbody');
-    // let test = document.getElementById("outputTable");
-    console.log(test);
-
+    // let test = document.getElementById("outputTable").getElementsByTagName('tbody');
+    // console.log(test);
 
     // Return the last row if there are still rows to draw so that we can observe it.
     if (returnLastRow) {
@@ -469,8 +460,4 @@ function getCurrentGuessDataFromInput() {
         misplacedData[i] = misplacedParas[i].textContent;
     }
     incorrectData = incorrectPara.textContent;
-    // console.log('hi');
-    // console.log(`correct data: ${correctData}`);
-    // console.log(misplacedData);
-    // console.log(incorrectData);
 };
