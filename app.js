@@ -421,10 +421,6 @@ function generateTable(data, startIndex) {
         cell.appendChild(text);
     }
 
-
-    // let test = document.getElementById("outputTable").getElementsByTagName('tbody');
-    // console.log(test);
-
     // Return the last row if there are still rows to draw so that we can observe it.
     if (returnLastRow) {
         return row;

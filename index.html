@@ -77,37 +77,36 @@
                 <h4>Letter Match</h4>
                 <p>This strategy is intuitive and how most people play Wordle. The
                   idea is to choose words that have letters which are found most frequently in the solution set
-                  words, and more accurately, choose words that have their letters in more frequent locations. This
+                  words, and more accurately choose words that have their letters in frequent locations. This
                   algorithm scores each word in the valid guess set (guesses and solutions) against
                   all the words in the possible solutions set. The score is normalized by dividing the total score
-                  by the
-                  size of the solution set.</p>
-                <p>Words are scored as follows: 3 points for an exact match; 2 points for a
+                  by the size of the solution set.</p>
+                <p>Words scoring: 3 points for an exact match; 2 points for a
                   letter that is included in the solution but incorrectly placed (credit is only given up to the
                   total number of occurrences of the letter in the solution word matching the total number of
                   occurrences in the guess word); 1 point for an incorrect letter as it eliminates solutions from
                   the solution space; 0 points for repeat letters in the guess word that provide no additional info.
                   The point values are somewhat arbitrary, and it is debatable whether two misplaced letters are
-                  more
-                  valuable than a single correctly placed letter, but most importantly:
+                  more valuable than a single correctly placed letter, but most importantly:
                 <div style="text-align:center"><strong>CORRECT > MISPLACED > INCORRECT > DUPLICATE</strong></div>
                 </p>
                 <p>A perfect score is 15 indicating that the solution has been found.</p>
                 <p>For a more thorough explanation of the information theory behind this and the original idea for
                   the scoring algorithm, read this <a
                     href="https://medium.com/geekculture/the-best-wordle-opener-is-orate-5600c30695b6">medium.com
-                    article</a>
-                  medium.com article.</p>
+                    article</a>.</p>
                 <h4>Reduce Solution Space</h4>
                 <p>This strategy is less intuitive. Instead of choosing a guess word that has a lot of letters to
                   likely match the solution, we pick a word where the average solution space size is the smallest
                   after making the guess. Since we don't know what the solution is, we choose a word from the
-                  solution set, assume that it is not the solution, and figure out what the Wordle feedback for our
-                  guess would be. We can then reduce the solution set and count its size. Repeat for all words in
+                  solution set and determine what the Wordle feedback for our guess would be. We can then reduce the
+                  solution by the new cumulative known info set and count its size. Repeat for all words in
                   the original solution set and average for the expected size after making the guess.</p>
-                <p><strong>Warning:</strong> This is computationaly intense and will run slowly if you have zero known
-                  information in the solver. If you are using only valid solutions, choose <strong>RAISE</strong> as the
-                  first guess. If not restricting to only valid solutions, choose <strong>ROATE</strong>.</p>
+                <p><strong class="text-danger">Warning:</strong> This is computationaly expensive and will run a long
+                  time if you have zero known information in the solver. If you are using only valid solutions, choose
+                  <strong>RAISE</strong> as the first guess. If not restricting to only valid solutions, choose
+                  <strong>ROATE</strong>.
+                </p>
                 <h4>Use Known Information in Guesses</h4>
                 <p>The solution space is always reduced by whatever information you have entered into the solver
                   before computing the guesses. Toggling this on will similarly restrict the guess words used. E.g.
@@ -227,6 +226,10 @@
                 </p>
                 <p>So we make a minor trade gaining ease of use inputting data into the solver against perfect
                   results.</p>
+                <p><strong class="text-danger">Gotcha:</strong> Be careful with guess words that have a double letter
+                  but only one of them is a
+                  hit. If you enter the second one in <strong>INCORRECT</strong> you'll get no results. A letter cannot
+                  simultaneously be in the word and not in the word!</p>
 
                 <button class="btn btn-primary btn-sm border border-primary rounded-0 float-end" type="button"
                   data-bs-toggle="collapse" data-bs-target="#flush-collapseSolve" aria-expanded="false"
