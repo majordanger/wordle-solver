@@ -145,10 +145,17 @@ loadCurrentDictionaries();
 const allTiles = document.querySelectorAll(".tile");
 for (let i = 0; i < allTiles.length; i++) {
     allTiles[i].addEventListener('click', (e) => allTiles[i].focus());
+    allTiles[i].addEventListener('focusin', (event) => {
+        document.querySelector(".last-selected-tile").classList.remove("last-selected-tile");
+        allTiles[i].classList.add("selected-tile");
+        allTiles[i].classList.add("last-selected-tile");
+    });
+    allTiles[i].addEventListener('focusout', (event) => {allTiles[i].classList.remove("selected-tile")});
 }
 
 // Capture any keypress.
 document.addEventListener("keydown", e => {
+    console.log(e);
 
     if (e.key === '?' || e.key === '/') {
         e.preventDefault();

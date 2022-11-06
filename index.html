@@ -18,10 +18,12 @@
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="keyboard/keyboard.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-  <div class="container p-1 shadow">
+  <div class="container p-1">
     <!-- BEGIN Top-level nav button tabs. -->
     <ul class="nav justify-content-center nav-justified nav-pills mb-3 p-0" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
@@ -36,14 +38,6 @@
       </li>
     </ul>
     <!-- END Top-level nav button tabs. -->
-
-    <!-- 
-    <div style="display: flex; justify-content: center;">
-      <p>Welcome to the web's best Wordle solver!!! Enter the information you know, choose a
-        strategy, and press
-        <strong>Compute Guesses</strong>.
-      </p>
-    </div> -->
 
 
     <div class="tab-content" id="pills-tabContent">
@@ -248,7 +242,7 @@
               <div class="row-label ">
                 <p>CORRECT</p>
               </div>
-              <div class="tile c-tile wrap-tile" id="x0_y0" tabindex="0">
+              <div class="tile c-tile wrap-tile last-selected-tile" id="x0_y0" tabindex="0">
                 <p></p>
               </div>
               <div class="tile c-tile wrap-tile" id="x1_y0" tabindex="0">
@@ -288,50 +282,57 @@
                 <p></p>
               </div>
             </div>
-
             <p></p>
           </div>
           <div class="column col-lg-6">
 
             <p></p>
             <form>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="strategySelection" value="letterMatch"
-                  id="strategySelection1" checked>
-                <label class="form-check-label" for="strategySelection1">
-                  Letter Match
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="strategySelection" value="reduceSpace"
-                  id="strategySelection2">
-                <label class="form-check-label" for="strategySelection2">
-                  Reduce Solution Space
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="useKnownInfo" value="useKnownInfo"
-                  id="useKnownInfo" checked>
-                <label class="form-check-label" for="useKnownInfo">
-                  Use Known Information in Guesses
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="onlyValidSols" value="onlyValidSols"
-                  id="onlyValidSols" checked>
-                <label class="form-check-label" for="onlyValidSols">
-                  Use Only Valid Solutions as Guesses
-                </label>
-              </div>
-              <div class="btn-group col-12">
-                <button type="submit" id="compute" class="btn btn-primary btn-md border border-primary rounded-0 col-6">
-                  <span id="computeText">Compute Guesses</span>
-                  <span id="computeComplete" class="mono"></span>
-                </button>
-                <button type="button" id="stop" class="btn btn-danger btn-md border border-danger rounded-0 col-6"
-                  disabled>
-                  <span class="mono">STOP</span>
-                </button>
+              <div class="row">
+                <div class="column order-2 order-lg-1">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="strategySelection" value="letterMatch"
+                      id="strategySelection1" checked>
+                    <label class="form-check-label" for="strategySelection1">
+                      Letter Match
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="strategySelection" value="reduceSpace"
+                      id="strategySelection2">
+                    <label class="form-check-label" for="strategySelection2">
+                      Reduce Solution Space
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="useKnownInfo" value="useKnownInfo"
+                      id="useKnownInfo" checked>
+                    <label class="form-check-label" for="useKnownInfo">
+                      Use Known Information in Guesses
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="onlyValidSols" value="onlyValidSols"
+                      id="onlyValidSols" checked>
+                    <label class="form-check-label" for="onlyValidSols">
+                      Use Only Valid Solutions as Guesses
+                    </label>
+                  </div>
+                </div>
+
+                <div class="column order-1 order-lg-2">
+                  <div class="btn-group col-12">
+                    <button type="submit" id="compute"
+                      class="btn btn-primary btn-md border border-primary rounded-0 col-6">
+                      <span id="computeText">Compute Guesses</span>
+                      <span id="computeComplete" class="mono"></span>
+                    </button>
+                    <button type="button" id="stop" class="btn btn-danger btn-md border border-danger rounded-0 col-6"
+                      disabled>
+                      <span class="mono">STOP</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </form>
           </div>
@@ -520,12 +521,37 @@
         </div>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-      crossorigin="anonymous"></script>
-    <script type="module" src="./app.js"></script>
-    <script src="./solver.js"></script>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+  <script type="module" src="./app.js"></script>
+  <script src="./solver.js"></script>
+  <script src="keyboard/keyboard.js"></script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAErDY2zrYQeebsZMsVPxwQp9Hrywvs0A4",
+      authDomain: "wordle-solver-dev.firebaseapp.com",
+      projectId: "wordle-solver-dev",
+      storageBucket: "wordle-solver-dev.appspot.com",
+      messagingSenderId: "856289820461",
+      appId: "1:856289820461:web:59b90f870e691a43fcdda4",
+      measurementId: "G-XJRKVY49NS"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
 </body>
 
 <!-- netsh interface portproxy add v4tov4 listenport=5500 listenaddress=0.0.0.0 connectport=5500 connectaddress=172.28.172.253 -->

@@ -167,6 +167,7 @@ function handleKeyInputForTileNav(key, elem) {
 
 // Determine the tile type and delegate handling the event.
 function handleKeyInputForTileCharOrBack(e, elem) {
+    // alert("HI");
     const para = elem.firstElementChild;
     const textLength = para.textContent.length;
     const key = e.key;

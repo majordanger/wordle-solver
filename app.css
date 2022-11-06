@@ -2,6 +2,8 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--bs-dark);
     color: var(--bs-light);
+    touch-action: manipulation;
+    min-height: 1000px;
 }
 
 h1 {
@@ -42,13 +44,16 @@ textarea {
     cursor: default;
 }
 
+.tile:focus {
+    outline: none;
+}
+
 .tile:hover {
     border-width: 2px;
 }
 
-.tile:focus {
-    border-width: 3px;
-    outline: none;
+.selected-tile {
+    border-width: 4px !important;
 }
 
 .c-tile {
@@ -100,8 +105,8 @@ textarea {
 
 #about {
     position: fixed;
-    bottom: 2px;
-    right: 2px;
+    bottom: 10px;
+    right: 10px;
 }
 
 .strategy-letters {
