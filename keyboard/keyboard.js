@@ -42,21 +42,21 @@ const Keyboard = {
     _createKeys() {
         const fragment = document.createDocumentFragment();
         const keyLayout = [
-            
+
             "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
             "A", "S", "D", "F", "G", "H", "J", "K", "L",
-            "Z", "X", "C", "V", "B", "N", "M", "?",
+            "Z", "X", "C", "V", "B", "N", "M", "info",
             "done", "space", "backspace"
         ];
 
         // Creates HTML for an icon
         const createIconHTML = (icon_name) => {
-            return `<i class="material-icons">${icon_name}</i>`;
+            return `<span class="material-icons-outlined">${icon_name}</span>`;
         };
 
         keyLayout.forEach(key => {
             const keyElement = document.createElement("button");
-            const insertLineBreak = ["P", "L", "?"].indexOf(key) !== -1;
+            const insertLineBreak = ["P", "L", "info"].indexOf(key) !== -1;
 
             // Add attributes/classes
             keyElement.setAttribute("type", "button");
@@ -64,12 +64,23 @@ const Keyboard = {
 
             switch (key) {
                 case "backspace":
-                    keyElement.classList.add("keyboard__key--wide");
+                    keyElement.classList.add("keyboard__key--wide", "keyboard__key--dark");
                     keyElement.innerHTML = createIconHTML("backspace");
 
                     keyElement.addEventListener("click", () => {
                         document.querySelector(".last-selected-tile").focus();
-                        document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'Backspace'}));
+                        document.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'Backspace' }));
+                    });
+
+                    break;
+
+                case "info":
+                    keyElement.classList.add("keyboard__key--dark");
+                    keyElement.innerHTML = createIconHTML("info");
+
+                    keyElement.addEventListener("click", () => {
+                        document.querySelector(".last-selected-tile").focus();
+                        document.dispatchEvent(new KeyboardEvent('keydown', { 'key': '?' }));
                     });
 
                     break;
@@ -80,15 +91,15 @@ const Keyboard = {
 
                     keyElement.addEventListener("click", () => {
                         document.querySelector(".last-selected-tile").focus();
-                        document.dispatchEvent(new KeyboardEvent('keydown', {'key': ' '}));
+                        document.dispatchEvent(new KeyboardEvent('keydown', { 'key': ' ' }));
                     });
 
                     break;
 
                 case "done":
                     keyElement.classList.add("keyboard__key--wide", "keyboard__key--dark");
-                    keyElement.textContent = 'CLOSE';
-                    // keyElement.innerHTML = createIconHTML("check_circle");
+                    // keyElement.textContent = 'CLOSE';
+                    keyElement.innerHTML = createIconHTML("keyboard_hide");
 
                     keyElement.addEventListener("click", () => {
                         this.close();
@@ -101,7 +112,7 @@ const Keyboard = {
 
                     keyElement.addEventListener("click", (event) => {
                         document.querySelector(".last-selected-tile").focus();
-                        document.dispatchEvent(new KeyboardEvent('keydown', {'key': key}));
+                        document.dispatchEvent(new KeyboardEvent('keydown', { 'key': key }));
                     });
 
                     break;
@@ -117,22 +128,6 @@ const Keyboard = {
         return fragment;
     },
 
-    // _triggerEvent(handlerName) {
-    //     if (typeof this.eventHandlers[handlerName] == "function") {
-    //         this.eventHandlers[handlerName](this.properties.value);
-    //     }
-    // },
-
-    // _toggleCapsLock() {
-    //     this.properties.capsLock = !this.properties.capsLock;
-
-    //     for (const key of this.elements.keys) {
-    //         if (key.childElementCount === 0) {
-    //             key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
-    //         }
-    //     }
-    // },
-
     open() {
         this.elements.main.classList.remove("keyboard--hidden");
     },
@@ -143,5 +138,10 @@ const Keyboard = {
 };
 
 window.addEventListener("DOMContentLoaded", function () {
-    Keyboard.init();
+    if (navigator.maxTouchPoints > 0) {
+        Keyboard.init();
+        document.querySelector("#compute").addEventListener("click", () => {
+            Keyboard.close();
+        });
+    }
 });

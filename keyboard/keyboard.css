@@ -23,7 +23,7 @@
     width: 7%;
     max-width: 90px;
     margin: 3px;
-    border-radius: 4px;
+    border-radius: 0px;
     border: none;
     background: rgba(255, 255, 255, 0.2);
     color: var(--bs-light);
@@ -68,5 +68,6 @@
 }
 
 .keyboard__key--dark {
-    background: rgba(0, 0, 0, 0.25);
+    /* background: rgba(0, 0, 0, 0.25); */
+    background: var(--bs-secondary);
 }

@@ -150,7 +150,7 @@ for (let i = 0; i < allTiles.length; i++) {
         allTiles[i].classList.add("selected-tile");
         allTiles[i].classList.add("last-selected-tile");
     });
-    allTiles[i].addEventListener('focusout', (event) => {allTiles[i].classList.remove("selected-tile")});
+    allTiles[i].addEventListener('focusout', (event) => { allTiles[i].classList.remove("selected-tile") });
 }
 
 // Capture any keypress.
@@ -464,3 +464,17 @@ function getCurrentGuessDataFromInput() {
     }
     incorrectData = incorrectPara.textContent;
 };
+
+// alert(`concurrency: ${navigator.hardwareConcurrency}`);
+
+// const beforeUnloadListener = (event) => {
+//     event.preventDefault();
+//     console.log('Bing');
+//     return event.returnValue = "Are you sure you want to exit?";
+// };
+
+// window.onbeforeunload = beforeUnloadListener;
+// window.onbeforeunload = function () {
+//     preventDefault();
+//     return 'Are you sure you want to leave? Data entered will be lost.';
+// };

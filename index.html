@@ -19,7 +19,8 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="app.css">
   <link rel="stylesheet" href="keyboard/keyboard.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"> -->
 </head>
 
 <body>
@@ -27,14 +28,14 @@
     <!-- BEGIN Top-level nav button tabs. -->
     <ul class="nav justify-content-center nav-justified nav-pills mb-3 p-0" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active top-nav-button border border-primary rounded-0" id="pills-solver-tab"
-          data-bs-toggle="pill" data-bs-target="#pills-solver" type="button" role="tab" aria-controls="pills-solver"
+        <button class="nav-link active top-nav-button rounded-0" id="pills-solver-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-solver" type="button" role="tab" aria-controls="pills-solver"
           aria-selected="true">SOLVER</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link top-nav-button border border-primary rounded-0" id="pills-dictionary-tab"
-          data-bs-toggle="pill" data-bs-target="#pills-dictionary" type="button" role="tab"
-          aria-controls="pills-dictionary" aria-selected="false">DICTIONARY</button>
+        <button class="nav-link top-nav-button rounded-0" id="pills-dictionary-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-dictionary" type="button" role="tab" aria-controls="pills-dictionary"
+          aria-selected="false">DICTIONARY</button>
       </li>
     </ul>
     <!-- END Top-level nav button tabs. -->
@@ -75,7 +76,7 @@
                   algorithm scores each word in the valid guess set (guesses and solutions) against
                   all the words in the possible solutions set. The score is normalized by dividing the total score
                   by the size of the solution set.</p>
-                <p>Words scoring: 3 points for an exact match; 2 points for a
+                <p>Word scoring: 3 points for an exact match; 2 points for a
                   letter that is included in the solution but incorrectly placed (credit is only given up to the
                   total number of occurrences of the letter in the solution word matching the total number of
                   occurrences in the guess word); 1 point for an incorrect letter as it eliminates solutions from
@@ -94,21 +95,8 @@
                   likely match the solution, we pick a word where the average solution space size is the smallest
                   after making the guess. Since we don't know what the solution is, we choose a word from the
                   solution set and determine what the Wordle feedback for our guess would be. We can then reduce the
-                  solution by the new cumulative known info set and count its size. Repeat for all words in
+                  solution set by the new cumulative known info set and count its size. Repeat for all words in
                   the original solution set and average for the expected size after making the guess.</p>
-                <p><strong class="text-danger">Warning:</strong> This is computationaly expensive and will run a long
-                  time if you have zero known information in the solver. If you are using only valid solutions, choose
-                  <strong>RAISE</strong> as the first guess. If not restricting to only valid solutions, choose
-                  <strong>ROATE</strong>.
-                </p>
-                <h4>Use Known Information in Guesses</h4>
-                <p>The solution space is always reduced by whatever information you have entered into the solver
-                  before computing the guesses. Toggling this on will similarly restrict the guess words used. E.g.
-                  if you have already made a guess and got the first letter correct as <strong
-                    class=" text-success">S</strong> then only guesses with the first letter <strong>S</strong> will
-                  be used.</p>
-                <p>If this is toggled off, the known information will be ignored and all guesses will be considered.
-                  This sometimes results in high-ranking words with <strong>Is Soln = false</strong>.</p>
                 The score reported is the average size of the solution set after making the guess, so the perfect
                 score is <strong>1.00</strong> but this doesn't mean the solution has been found. Consider a solver with
                 the known info
@@ -126,10 +114,23 @@
                   <strong>Use Only Valid Solutions as Guesses</strong>
                 </p>
                 <p>
-                  there would be only three remaining solutions: <strong>SASSY</strong>, <strong>SISSY</strong>, and
+                  There would be only three remaining solutions: <strong>SASSY</strong>, <strong>SISSY</strong>, and
                   <strong>SUSHI</strong>. Using any of them as the guess would leave only one possibility if it were not
                   the solution itself.
                 </p>
+                <p><strong class="text-danger">Warning:</strong> This is computationaly expensive and will run a long
+                  time if you have zero known information in the solver. If you are using only valid solutions, choose
+                  <strong>RAISE</strong> as the first guess. If not restricting to only valid solutions, choose
+                  <strong>ROATE</strong>.
+                </p>
+                <h4>Use Known Information in Guesses</h4>
+                <p>The solution space is always reduced by whatever information you have entered into the solver
+                  before computing the guesses. Toggling this on will similarly restrict the guess words used. E.g.
+                  if you have already made a guess and got the first letter correct as <strong
+                    class=" text-success">S</strong> then only guesses with the first letter <strong>S</strong> will
+                  be used.</p>
+                <p>If this is toggled off, the known information will be ignored and all guesses will be considered.
+                  This sometimes results in high-ranking words with <strong>Is Soln = false</strong>.</p>
                 <h4>Use Only Valid Solutions as Guesses</h4>
                 <p>Wordle uses two dictionaries. One is the set of words that can be the solution to the puzzle, and
                   a second that it will allow as guesses but can't ever be the solution. Toggling this on restricts
@@ -282,11 +283,11 @@
                 <p></p>
               </div>
             </div>
-            <p></p>
+            <!-- <p></p> -->
           </div>
-          <div class="column col-lg-6">
+          <div class="column col-lg-6 mt-3 mt-lg-0">
 
-            <p></p>
+            <!-- <p></p> -->
             <form>
               <div class="row">
                 <div class="column order-2 order-lg-1">
@@ -320,7 +321,7 @@
                   </div>
                 </div>
 
-                <div class="column order-1 order-lg-2">
+                <div class="column order-1 order-lg-2 mt-0 mb-3 mt-lg-3 mb-lg-0">
                   <div class="btn-group col-12">
                     <button type="submit" id="compute"
                       class="btn btn-primary btn-md border border-primary rounded-0 col-6">
@@ -438,9 +439,9 @@
     </div>
 
     <!-- About button trigger modal -->
-    <button id="about" type="button" class="btn btn-primary btn-sm border border-primary rounded-0"
-      data-bs-toggle="modal" data-bs-target="#aboutModal">
-      <strong>?</strong>
+    <button id="about" type="button" class="text-light bg-transparent" data-bs-toggle="modal"
+      data-bs-target="#aboutModal">
+      <i class="material-icons-outlined">info</i>
     </button>
 
     <!-- About modal -->
@@ -506,8 +507,8 @@
             </table>
             <br>
             <h4>Development</h4>
-            <p>This page is a labor of love, inspired by and dedicated to my loving wife who put up with me building
-              it for far too long.</p>
+            <p>This page is a labor of love, inspired by and dedicated to my loving wife who plays Wordle, Dordle, and
+              Quordle every day.</p>
             <p>It is built with pure JS, CSS, HTML, and a sprinkle of Bootstrap.</p>
             <p>Report issues, suggestions, or check out the source code on my <a
                 href="https://github.com/majordanger/wordle-solver">GitHub page for this project</a>.</p>
