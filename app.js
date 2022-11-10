@@ -155,7 +155,10 @@ for (let i = 0; i < allTiles.length; i++) {
 
 // Capture any keypress.
 document.addEventListener("keydown", e => {
-    console.log(e);
+    // message.innerHTML = `last time: ${window.localStorage.getItem('now')}, last key: ${window.localStorage.getItem('lastkey')}`;
+
+
+    // console.log(e);
 
     if (e.key === '?' || e.key === '/') {
         e.preventDefault();
@@ -171,8 +174,13 @@ document.addEventListener("keydown", e => {
     if (ALPHABET.includes(e.key) || TILE_NAV_KEYS.includes(e.key)) {
         e.preventDefault();
     }
-
     handleKeyInput(e);
+
+    getCurrentGuessDataFromInput();
+    window.localStorage.setItem("lasttileupdate", new Date());
+    window.localStorage.setItem("correct", correctData);
+    window.localStorage.setItem("misplaced", misplacedData);
+    window.localStorage.setItem("incorrect", incorrectData);
 })
 
 // A closure to use for callbacks that need a particular dictionary.
@@ -465,16 +473,40 @@ function getCurrentGuessDataFromInput() {
     incorrectData = incorrectPara.textContent;
 };
 
-// alert(`concurrency: ${navigator.hardwareConcurrency}`);
+console.log(localStorage);
 
-// const beforeUnloadListener = (event) => {
-//     event.preventDefault();
-//     console.log('Bing');
-//     return event.returnValue = "Are you sure you want to exit?";
-// };
+// On load we want to do a few things: check if this is the first time using the app, and restore state if they had 
+// previously entered data into the solver.
+window.addEventListener("DOMContentLoaded", function () {
+    const oneHourMS = 3600000;
+    // We don't want to repopulate if they've been away too long since the puzzle changes every day.
+    if (this.localStorage.getItem('lasttileupdate') && (new Date() - new Date(this.localStorage.getItem('lasttileupdate')) < 12 * oneHourMS)) {
+        repopulateTileStateFromLastVisit();
+    }
 
-// window.onbeforeunload = beforeUnloadListener;
-// window.onbeforeunload = function () {
-//     preventDefault();
-//     return 'Are you sure you want to leave? Data entered will be lost.';
-// };
+    // Only show the user the 'getting started modal if it's their first visit.
+    if (!this.localStorage.getItem('lastvisit')) {
+        const welcomeModal = document.querySelector('#welcomeModal');
+        bootstrap.Modal.getOrCreateInstance(welcomeModal).show();
+    };
+    window.localStorage.setItem("lastvisit", new Date());
+});
+
+function repopulateTileStateFromLastVisit() {
+
+    const correctFromStorage = window.localStorage.getItem('correct').split(',');
+    for (let i = 0; i < correctData.length; i++) {
+        updateCTile(correctFromStorage[i], correctParas[i].parentElement);
+    }
+    const misplacedFromStorage = window.localStorage.getItem('misplaced').split(',');
+    for (let i = 0; i < misplacedData.length; i++) {
+        const misplacedCharArray = misplacedFromStorage[i].split('');
+        for (let j = 0; j < misplacedCharArray.length; j++) {
+            updateMTile(misplacedCharArray[j], misplacedParas[i].parentElement);
+        }
+    }
+    const incorrectCharArray = window.localStorage.getItem('incorrect').split('');
+    for (let i = 0; i < incorrectCharArray.length; i++) {
+        updateITile(incorrectCharArray[i], incorrectPara.parentElement);
+    }
+}

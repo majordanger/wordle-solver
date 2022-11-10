@@ -125,5 +125,6 @@ textarea {
 .inline {
     width: 14px;
     height: 14px;
+    border: 2px solid;
     display: inline-flex;
 }

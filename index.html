@@ -383,7 +383,7 @@
                     href="http://app.aspell.net/create">aspell.net</a> possible combined with the current Wordle
                   dictionaries. The expanded dictionary will include many words most people wouldn't consider useful.
                 </p>
-                <p>Refresh the page to reset the Solver and Dictionary to defaults.</p>
+                <p>Refresh the page to reset the dictionary to the defaults.</p>
                 <button class="btn btn-primary btn-sm border border-primary rounded-0 float-end" type="button"
                   data-bs-toggle="collapse" data-bs-target="#flush-collapseDict" aria-expanded="false"
                   aria-controls="flush-collapseDict">
@@ -465,10 +465,10 @@
                 <tr>
                   <td>a-zA-Z</td>
                   <td>
-                    <div class="inline bg-success"></div><span> Add or overwrite character and advance tile
+                    <div class="inline border-success"></div><span> Add or overwrite character and advance tile
                       focus.</span><br>
-                    <div class="inline bg-warning"></div>
-                    <div class="inline bg-danger"></div><span> Append character.</span>
+                    <div class="inline border-warning"></div>
+                    <div class="inline border-danger"></div><span> Append character.</span>
                   </td>
                 </tr>
                 <tr>
@@ -482,9 +482,9 @@
                 <tr>
                   <td>Space</td>
                   <td>
-                    <div class="inline bg-success"></div><span> Delete character and advance tile focus.</span><br>
-                    <div class="inline bg-warning"></div><span> Advance tile focus.</span><br>
-                    <div class="inline bg-danger"></div><span> No effect.</span>
+                    <div class="inline border-success"></div><span> Delete character and advance tile focus.</span><br>
+                    <div class="inline border-warning"></div><span> Advance tile focus.</span><br>
+                    <div class="inline border-danger"></div><span> No effect.</span>
                   </td>
                 </tr>
                 <tr>
@@ -514,6 +514,42 @@
                 href="https://github.com/majordanger/wordle-solver">GitHub page for this project</a>.</p>
             <p>For more information about me, visit <a href="https://www.linkedin.com/in/dane-brandon-85170717/">me
                 on LinkedIn</a>.</p>
+          </div>
+          <div class="modal-footer text-bg-dark border border-secondary rounded-0">
+            <button type="button" class="btn btn-sm btn-primary border border-primary rounded-0"
+              data-bs-dismiss="modal">CLOSE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Welcome modal -->
+    <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content border border-secondary rounded-0">
+          <div class="modal-header text-bg-dark border border-secondary rounded-0">
+            <h5 class="modal-title" id="welcomeModalLabel">Welcome to winatwordle.com!</h5>
+            <button type="button" class="btn-close rounded-0" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body border border-secondary text-bg-dark">
+            <h4>Getting Started</h4>
+            <div><span>If you've already made a Wordle guess, tap on the</span> <span>
+                <div class="inline border-success"></div>
+                <div class="inline border-warning"></div>
+                <div class="inline border-danger"></div>
+              </span> <span>tiles, type the feedback from the game, and press <strong>Compute Guesses</strong>. If you
+                haven't made a guess yet and want to explore the best starting words, just press <strong>Compute
+                  Guesses</strong>.</span>
+            </div>
+            <p></p>
+            <p>
+              Tap <strong>Choose a Strategy</strong> to explore the possible ways to rank guesses, or just use the
+              defaults.
+            </p>
+            <p>
+              If you are playing Dordle or a Wordle variant using a different dictionary, go to the
+              <strong>DICTIONARY</strong> tab. For standard Wordle play, you don't need to change dictionaries.
+            </p>
           </div>
           <div class="modal-footer text-bg-dark border border-secondary rounded-0">
             <button type="button" class="btn btn-sm btn-primary border border-primary rounded-0"
