@@ -155,11 +155,6 @@ for (let i = 0; i < allTiles.length; i++) {
 
 // Capture any keypress.
 document.addEventListener("keydown", e => {
-    // message.innerHTML = `last time: ${window.localStorage.getItem('now')}, last key: ${window.localStorage.getItem('lastkey')}`;
-
-
-    // console.log(e);
-
     if (e.key === '?' || e.key === '/') {
         e.preventDefault();
         document.querySelector('#about').click();
@@ -176,6 +171,7 @@ document.addEventListener("keydown", e => {
     }
     handleKeyInput(e);
 
+    // Persist state to local storage so that if they back out or need to come back, they won't have to re-enter info.
     getCurrentGuessDataFromInput();
     window.localStorage.setItem("lasttileupdate", new Date());
     window.localStorage.setItem("correct", correctData);
@@ -244,11 +240,6 @@ function loadCurrentDictionaries() {
 
 const lastUpdate = document.querySelector("#lastUpdated");
 lastUpdate.innerText = `Dictionaries last updated: ${dictLastUpdated}`;
-
-//TODO: Delete this.
-// window.addEventListener('keydown', (e) => {
-//     console.log(e)
-// })
 
 const form = document.querySelector("form");
 const table = document.querySelector("#outputTable");
@@ -472,8 +463,6 @@ function getCurrentGuessDataFromInput() {
     }
     incorrectData = incorrectPara.textContent;
 };
-
-console.log(localStorage);
 
 // On load we want to do a few things: check if this is the first time using the app, and restore state if they had 
 // previously entered data into the solver.
